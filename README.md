@@ -1,2 +1,9 @@
-# hobby-project-frontend
-a web shop
+# hobby-project
+一个网上书店系统。
+实现功能： 
+  1.图书展示，
+  2.登录与注册，
+  3.管理员，
+  4.购物车，
+  5.。。更新中
+

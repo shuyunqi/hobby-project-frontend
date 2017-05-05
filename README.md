@@ -10,6 +10,6 @@
 *  angular,
 *  gulp
 ### 使用方法：
-*  解压npm-modules包在主目录下运行
-    gulp myweb
+    解压npm-modules包在主目录下运行
+      gulp myweb
   

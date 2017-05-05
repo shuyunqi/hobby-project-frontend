@@ -1,0 +1,148 @@
+<!-- <a href="#" ng-click="loginModal();" >登陆</a> -->
+
+<div class = "container myBackground no-padding" ng-style="caculateFrame()">
+  <nav class="navbar navbar-default myNav">
+    <ul style="list-style: none;">
+      <li>
+        <span  class="nav-btn" ng-click="loginModal();" ng-if="!data.current_user.id">登陆</span>
+        <span  class="nav-btn" ng-click="" ng-if="data.current_user.id">{{data.current_user.email}}</span>
+      </li>
+      <li>
+        <span class="nav-btn" ng-click="goState('search')" style="cursor: pointer;">首页</span>
+      </li>
+      <li class="pull-right">
+        <span  class="nav-btn" ng-click="signout();" ng-if="data.current_user.id">退出登陆</span>
+      </li>
+      <li>
+        <span class="nav-btn pull-right" ui-sref='admin_index' style="cursor: pointer;">管理员</span>
+      </li>
+    </ul>
+  </nav>
+  <nav class="navbar navbar-default navbar-fixed-bottom myNav-bottom">
+  </nav>
+  <div  class="pa_uivw anim-in-out anim-fade" autoscroll="false" data-anim-sync="false" data-anim-speed="300" ui-view>
+  </div>
+
+  <div class="left-side-grp">
+    <div class="side-cell" ng-click= goState('home')><md-icon class="side-icon" md-svg-icon="tuijian"></md-icon><span>推&nbsp;&nbsp;&nbsp;荐</span></div>
+    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="wenxue">  </md-icon><span>文学馆</span></div>
+    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="jiaoyu">  </md-icon><span>教育馆</span></div>
+    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="tongshu"> </md-icon><span>童书馆</span></div>
+    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="lizhi">   </md-icon><span>励志馆</span></div>
+    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="shenghuo"></md-icon><span>生活馆</span></div>
+    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="yishu">   </md-icon><span>艺术馆</span></div>
+    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="keji">    </md-icon><span>科技馆</span></div>
+  </div>
+
+  <div class="right-side-grp">
+    <div class="side-cell1" ng-click="openSidenav('gerenziliao')"><md-icon class="side-icon1" md-svg-icon="user">  </md-icon><span>个人资料</span></div>
+    <div class="side-cell2" ng-click="openSidenav('gouwuche')">   <md-icon class="side-icon2" md-svg-icon="cart">  </md-icon><span>购物车</span></div>
+    <div class="side-cell3" ng-click="openSidenav('dingdan')">    <md-icon class="side-icon3" md-svg-icon="order"> </md-icon><span>我的订单</span></div>
+  </div>
+
+<md-sidenav style="margin-top: 50px;" class="md-sidenav-left " md-component-id="gerenziliao"
+                md-disable-backdrop md-whiteframe="4">
+
+<!--   <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Disabled Backdrop</h1>
+      </md-toolbar> -->
+  <div class="sidenav-title">
+    <span>{{data.current_user.name?data.current_user.name:data.current_user.email}}</span><span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('gerenziliao')"></span>
+  </div>
+  <md-content layout-margin ng-if="!show_change_password && !show_change_username">
+    <md-button md-no-ink class="md-primary" ng-click="changePassword();">修改密码</md-button>
+    <md-button md-no-ink class="md-primary" ng-click="changeUsername();" >修改用户名</md-button>
+  </md-content>
+
+  <md-content layout-margin ng-if="show_change_password">
+    <div style="margin-left: 70px;">
+      <md-input-container class="login-input" >
+        <label>&nbsp;原&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
+        <input ng-model="change_passwd.old_passwd" type="password">
+      </md-input-container>
+      <md-input-container class="login-input" >
+        <label>&nbsp;新&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
+        <input ng-model="change_passwd.passwd" type="password">
+      </md-input-container>
+      <md-input-container class="login-input" >
+        <label>确&nbsp;认&nbsp;密&nbsp;码</label>
+        <input ng-model="change_passwd.rePasswd" type="password">
+      </md-input-container>
+    </div>
+    <ul>
+      <md-button md-no-ink class="md-primary" ng-click="confirmChangePassword();">确定</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="cancelChangePassword();" >取消</md-button>
+    </ul>
+  </md-content>
+  <md-content layout-margin ng-if="show_change_username" >
+    <div style="margin-left: 70px;">
+      <md-input-container class="login-input" >
+        <label>新用户名</label>
+        <input ng-model="change_passwd.username">
+      </md-input-container>
+    </div>
+    <ul>
+      <md-button md-no-ink class="md-primary" ng-click="confirmChangeUsername()">确定</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="cancelChangeUsername()" >取消</md-button>
+    </ul>
+  </md-content>
+</md-sidenav>
+
+<md-sidenav style="margin-top: 50px;margin-bottom: 30px;" class="md-sidenav-left " md-component-id="gouwuche"
+                md-disable-backdrop md-whiteframe="4" layout="column">
+  <div class="sidenav-title" flex="10">
+    <span> 购物车 </span>
+    <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('gouwuche')"></span>
+  </div>
+  <md-content layout-margin  style="margin: 0px;" flex="80">
+    <div ng-repeat="item in data.current_carts track by $index" ng-mouseover="show_hover[$index] = true;" ng-mouseleave="show_hover[$index] = false;" >
+      <div layout="row" style="height: 130px;">
+        <md-checkbox aria-label="carts" ng-checked="exists(item, selected)" ng-click="toggle(item, selected)" flex="5">
+        </md-checkbox>
+        <img ng-src="/images/夜莺.jpg" style="padding: 5px;" flex="45" />
+        <div flex="50" layout="column">
+          <div style="padding: 10px;font-size: 18px;" flex="30">{{item.name}}</div>
+          <div class="cart_number" flex="30">
+            <md-chips ng-model="item.bookAmounts">
+              <input style='font-size: 20px;' type="number" ng-model="item.amount" ng-change='checkNum()'>
+            </md-chips>
+          </div>
+          <div flex="40" layout="row" layout-align="center center">
+            <div flex="30"><span ng-if="show_hover[$index]"  class="glyphicon glyphicon-trash mb-icon" style="font-size: 16px;" ng-click="deleteCart(item)"></span></div>
+            <div class="md-price" flex="70">￥{{item.price * item.discount | cut:2}}</div>
+          </div>
+        </div>
+      </div>
+      <md-divider ></md-divider>
+    </div>
+  </md-content>
+  <div class="sidenav-footer" flex="10">
+    <span class="checkbox-selectAll">
+      <md-checkbox aria-label="Select All"
+                   ng-checked="isChecked()"
+                   md-indeterminate="isIndeterminate()"
+                   ng-click="toggleAll()"
+                  >
+        <span >全选</span>
+      </md-checkbox>
+    </span>
+    <span class="text">总价: {{caculatePrice() | cut: 2}}({{selected.length}})</span>
+    <span class="mb-buy">结算</span>
+  </div>
+</md-sidenav>
+
+<md-sidenav style="margin-top: 50px;" class="md-sidenav-left " md-component-id="dingdan"
+                md-disable-backdrop md-whiteframe="4">
+  <div class="sidenav-title">
+    <span>订单</span>
+    <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('dingdan')"></span>
+  </div>
+  <md-content layout-margin >
+    <p>
+      dingdan
+    </p>
+  </md-content>
+</md-sidenav>
+
+</div>
+

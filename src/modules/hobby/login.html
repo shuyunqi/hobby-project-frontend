@@ -1,0 +1,87 @@
+
+<!-- <div class="modal" tabindex="-1" role="dialog" style="overflow: hidden;">
+
+  <div class="login">
+    <div class = "login-chose" style="float: left;" ng-click="gotoLogin(true)" ng-class ="{'login-visited':!register}" ><p class="login-font">登陆</p></div>
+    <div class = "login-chose" style="float: left;" ng-click="gotoLogin(false)" ng-class ="{'login-visited':register}"><p class="login-font">注册</p></div>
+
+      <form role="form" class="col-md-12 login-form" ng-if = "!register">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="form-group">
+            <input type="email" class="form-control" id="exampleInputEmail1" ng-model="user_login.email" ng-if = "!register" placeholder="邮 箱">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="密 码" ng-model="user_login.passwd" ng-if = "!register">
+          </div>
+          <div class="form-group" ng-show = "register">
+            <input type="password" class="form-control" id="exampleInputPassword1" ng-model="user_register.rePasswd" placeholder="重复密码" >
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-warning" style="width: 100%;" ng-show = "!register" ng-click="userLogin()">登  陆</button>
+          </div>
+          <div class="form-group">
+
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+      </form>
+      <form role="form" class="col-md-12 login-form" ng-if = "register">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+        <div class="form-group">
+          <input type="email" class="form-control" id="exampleInputEmail1" ng-model="user_register.email" ng-if = "register" placeholder="邮 箱">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="密 码" ng-model="user_register.passwd" ng-if = "register">
+        </div>
+        <div class="form-group" ng-show = "register">
+          <input type="password" class="form-control" id="exampleInputPassword1" ng-model="user_register.rePasswd" placeholder="重复密码" >
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-success" style="width: 100%;" ng-show = "register" ng-click="userRegister()">注  册</button>
+        </div>
+        </div>
+        <div class="col-md-1"></div>
+      </form>
+  </div>
+</div> -->
+
+
+<div class="modal login" tabindex="-1" role="dialog" style="overflow: hidden;">
+
+  <div class = "login-chose" style="float: left;" ng-click="gotoLogin(true)" ng-class ="{'login-visited':!register}" ><p class="login-font">登陆</p></div>
+  <div class = "login-chose" style="float: left;" ng-click="gotoLogin(false)" ng-class ="{'login-visited':register}"><p class="login-font">注册</p></div>
+
+  <div class="login-form" ng-if = "!register">
+    <md-input-container class="login-input">
+      <label>&nbsp;邮&nbsp;&nbsp;箱</label>
+      <input ng-blur="check.email=true" ng-focus="check.email=false" ng-model="user_login.email">
+      <div ng-if="check.email" class="my-message">{{ user_login.email | verify: 'email'}}</div>
+    </md-input-container>
+    <md-input-container class="login-input" >
+      <label>&nbsp;密&nbsp;&nbsp;码</label>
+      <input ng-blur="check.passwd=true" ng-focus="check.passwd=false" ng-model="user_login.passwd" type="password">
+      <div ng-if="check.passwd" class="my-message">{{ user_login.passwd | verify }}</div>
+    </md-input-container>
+    <md-button class="md-raised md-primary login-btn" ng-click="userLogin()">登 陆</md-button>
+  </div>
+
+  <div class="login-form" ng-if = "register">
+    <md-input-container class="login-input" >
+      <label>&nbsp;邮&nbsp;&nbsp;箱</label>
+      <input ng-blur="check.email=true" ng-focus="check.email=false" ng-model="user_register.email">
+      <div ng-if="check.email" class="my-message">{{ user_register.email | verify: 'email'}}</div>
+    </md-input-container>
+    <md-input-container class="login-input" >
+      <label>&nbsp;密&nbsp;&nbsp;码</label>
+      <input ng-blur="check.passwd=true" ng-focus="check.passwd=false" ng-model="user_register.passwd" type="password">
+    </md-input-container>
+    <md-input-container class="login-input" >
+      <label>确认密码</label>
+      <input ng-blur="check.passwd=true" ng-focus="check.passwd=false" ng-model="user_register.rePasswd" type="password">
+      <div ng-if="check.passwd" class="my-message">{{ user_register.rePasswd | verify : 'password': user_register.passwd}}</div>
+    </md-input-container>
+    <md-button class="md-raised md-warn login-btn" ng-click="userRegister()" style="margin-top: 0px;">注 册</md-button>
+  </div>
+</div>

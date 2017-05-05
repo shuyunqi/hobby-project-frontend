@@ -1,0 +1,28 @@
+<!-- <md-card class=" md-whiteframe-5dp" style="width: 180px;height: 280px;">
+  <md-card-title>
+    <md-card-title-media>
+      <div class="md-media-lg card-media"><img style="" ng-src="/images/夜莺.jpg" ></div>
+    </md-card-title-media>
+  </md-card-title>
+  <md-card-actions layout="column" layout-align="center center">
+    <h4>{{book.name}}</h4>
+    <span style="padding-top: 15px;">{{book.author}}</span>
+  </md-card-actions>
+</md-card> -->
+
+<div class="my-book md-whiteframe-5dp" ng-click="choseBook()">
+  <div class="mb-pic"><img style="" ng-src="/images/夜莺.jpg" /></div>
+  <div class="mb-title">
+    {{book.name}}
+  </div>
+  <div class="form-group" style="margin-left: 20px;margin-right: 20px;" ng-if="!admin">
+    <md-icon >
+      <span class="glyphicon glyphicon-shopping-cart" ng-class="{ 'icon-hover': !in_cart ,'icon-visited': in_cart}" ng-click="collect()"></span>
+    </md-icon>
+    <span class="md-price pull-right" style="">￥{{book.price * book.discount | cut: 2}}</span>
+  </div>
+  <div class="form-group" style="margin-left: 20px;margin-right: 20px;" ng-if="admin">
+    <span class="glyphicon glyphicon-edit icon-hover"></span>
+    <span class="glyphicon glyphicon-trash pull-right icon-hover" ng-click="deleteBook($event)"></span>
+  </div>
+</div>

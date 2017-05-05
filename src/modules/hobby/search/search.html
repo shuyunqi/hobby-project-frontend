@@ -1,0 +1,21 @@
+<div class="col-md-12  anim-slide-right" >
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <div class="myLogo">hobby</div>
+    <label class="myLogo_label">图书</label>
+    <div class="mySearch">
+      <div class="mySearch_header">
+        <span ng-class='{visited:!isThisNet}' ng-click="isThisNet=false">全网搜</span>
+        <span ng-class='{visited:isThisNet}' ng-click="isThisNet=true">本网搜</span>
+      </div>
+      <div class = "myInput-group input-group">
+        <input type="text" ng-model="mySearch" class="form-control">
+        <div class="input-side input-group-addon" ng-click="search(mySearch)">
+          <span class="glyphicon glyphicon-search "></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-1"></div>
+</div>

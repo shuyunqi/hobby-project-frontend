@@ -1,0 +1,33 @@
+<div class="login">
+
+  <div class = "login-chose" style="float: left;" ng-click="gotoLogin(true)" ng-class ="{'login-visited':!register}" ><p class="login-font">登陆</p></div>
+  <div class = "login-chose" style="float: left;" ng-click="gotoLogin(false)" ng-class ="{'login-visited':register}"><p class="login-font">注册</p></div>
+
+  <div class="login-form" ng-if = "!register">
+    <md-input-container class="login-input">
+      <label>&nbsp;邮&nbsp;&nbsp;箱</label>
+      <input ng-model="user_login.email" type="email">
+    </md-input-container>
+    <md-input-container class="login-input" >
+      <label>&nbsp;密&nbsp;&nbsp;码</label>
+      <input ng-model="user_login.passwd" type="password">
+    </md-input-container>
+    <md-button class="md-raised md-primary login-btn" ng-click="userLogin()">登 陆</md-button>
+  </div>
+
+  <div class="login-form" ng-if = "register">
+    <md-input-container class="login-input" >
+      <label>&nbsp;邮&nbsp;&nbsp;箱</label>
+      <input ng-model="user_register.email" type="email">
+    </md-input-container>
+    <md-input-container class="login-input" >
+      <label>&nbsp;密&nbsp;&nbsp;码</label>
+      <input ng-model="user_register.passwd" type="password">
+    </md-input-container>
+    <md-input-container class="login-input" >
+      <label>确认密码</label>
+      <input ng-model="user_register.rePasswd" type="password">
+    </md-input-container>
+    <md-button class="md-raised md-warn login-btn" ng-click="userRegister()" style="margin-top: 0px;">注 册</md-button>
+  </div>
+</div>

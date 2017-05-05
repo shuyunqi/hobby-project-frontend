@@ -1,0 +1,116 @@
+<div class = "container myBackground no-padding" ng-style="caculateFrame()">
+  <nav class="navbar navbar-default myNav">
+    <ul style="list-style: none;">
+      <li>
+        <span class="nav-btn" ui-sref="hobby_index.search" style="cursor: pointer;">首页</span>
+      </li>
+    </ul>
+  </nav>
+  <nav class="navbar navbar-default navbar-fixed-bottom myNav-bottom">
+  </nav>
+
+  <div layout='row'>
+    <div flex="15" class="ad-sideBar" ng-style="getHeight()" >
+      <md-list flex>
+        <md-subheader class="md-list-header">
+        </md-subheader>
+        <md-divider ></md-divider>
+        <md-list-item class="md-1-line" ng-click="sw_option= 'in_store'">
+          <div class="md-list-item-text" layout="column">
+            <h4 ng-class="{ 'select_item': sw_option == 'in_store'}">上架中的商品</h4>
+          </div>
+        </md-list-item>
+        <md-list-item class="md-1-line" ng-click="sw_option= 'add_book'">
+          <div class="md-list-item-text" layout="column">
+            <h4 ng-class="{ 'select_item': sw_option == 'add_book'}">添加商品</h4>
+          </div>
+        </md-list-item>
+        <md-divider ></md-divider>
+      </md-list>
+    </div>
+    <div flex='85'>
+      <div  ng-if="sw_option == 'in_store'">
+        <ul class="mb-list">
+          <li ng-repeat = 'book in data.books' class="book-list" >
+            <ui-book book = 'book' admin=true></ui-book>
+          </li>
+        </ul>
+      </div>
+
+      <div ng-if="sw_option == 'add_book'">
+        <md-tabs md-dynamic-height md-border-bottom>
+          <md-tab label="添加">
+            <md-content class="md-padding" style="padding-left: 90px;padding-right: 90px;" ng-style="getHeight(40)" >
+              <div>
+                <div layout-gt-xs="row">
+                  <md-input-container class="md-block" flex-gt-xs>
+                    <label>书&nbsp;名</label>
+                    <input required ng-model="book.name">
+                    <div ng-messages="book.name.$error">
+                      <div ng-message="required">This is required.</div>
+                    </div>
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>出版日期</label>
+                    <md-datepicker ng-model="book.pubishTime" md-current-view="year"></md-datepicker>
+                  </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>出版社</label>
+                    <input ng-model="book.pubishHouse">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>作者</label>
+                    <input ng-model="book.author">
+                  </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>价格</label>
+                    <input ng-model="book.price">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>数量</label>
+                    <input type="number" ng-model="book.amount">
+                  </md-input-container>
+                </div>
+
+                <md-input-container class="md-block">
+                  <label>介绍</label>
+                  <textarea ng-model="book.context" md-maxlength="150" rows="3" md-select-on-focus></textarea>
+                </md-input-container>
+
+
+                <md-chips ng-model="tag.name" readonly="tag.readonly" md-removable="tag.removable" placeholder="添加标签" md-enable-chip-edit="true">
+                </md-chips>
+
+                <div class="mb-buy pull-right">
+                  <md-button class="md-raised md-warn" ng-click="addBook()">添加</md-button>
+                </div>
+
+              </div>
+            </md-content>
+          </md-tab>
+          <md-tab label="编辑">
+            <md-content class="md-padding">
+              <h1 class="md-display-2">Tab Two</h1>
+
+            </md-content>
+          </md-tab>
+          <!-- <md-tab label="three">
+            <md-content class="md-padding">
+              <h1 class="md-display-2">Tab Three</h1>
+
+            </md-content>
+          </md-tab> -->
+        </md-tabs>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@ angular.module('myWeb.lib.service.spaService',[
 angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', 'storageService' ,'$mdToast' ,function($http, storageService ,$mdToast){
   var spaService = {}
   var base_url="http://localhost:3010";
-
+  // var base_url="http://192.168.1.113:3010";
   function setCookie(c_name,value,expiredays){
     var exdate=new Date()
     exdate.setDate(exdate.getDate()+expiredays)
@@ -203,18 +203,102 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
   }
 
   spaService.search = function(what){
-
     return $http({
       method: 'GET',
       url: base_url + '/search',
       params: what
     }).success(function(data, status, headers, config){
-      if(status=='200' && data.success){
-        console.log('response',data);
+      if(data.length>0){
+        storageService.saveData('books',data);
+      }
+    }).error(function(data, status, headers, config){
+
+    })
+  }
+
+  spaService.editUser = function(who,criteria,what){
+    var params = {};
+    params.id = who;
+    params.criteria = criteria?criteria:null;
+    params.edit = what?what:null;
+    params = addCookie(params);
+    return $http({
+      method: 'PUT',
+      url: base_url + '/users/edit',
+      data: params
+    }).success(function(data, status, headers, config){
+      if(data && status==200){
+        if(!data.success)
+          storageService.saveData('current_user',data);
+        if(!data.error){
+          $mdToast.show(
+            $mdToast.editUserSuccess()
+          );
+        }else{
+          $mdToast.show(
+            $mdToast.editUserError()
+          );
+        }
       }
     })
   }
 
+  spaService.addConsignee = function(data){
+    var params={};
+    params.name = data.name;
+    params.phone = typeof data.phone=='number'?data.phone:0;
+    params.address = data.address;
+    params = addCookie(params);
+    return $http({
+      method: 'PUT',
+      url: base_url + '/consignee/add',
+      data: params
+    }).success(function(data, status, headers, config){
+    });
+  }
+
+  spaService.getConsignees = function(){
+    var params = {};
+    params = addCookie(params);
+
+    return $http({
+      method: 'GET',
+      url: base_url + '/consignee/current',
+      params: params
+    }).success(function(data, status, headers, config){
+      if(data.length>0){
+        storageService.saveData('current_consignees',data);
+      }
+    });
+
+  }
+
+  spaService.addOrderForm = function(books){
+    var params={ data:{}};
+    params.data.books = books;
+    params.data.type="prepare";
+    params = addCookie(params);
+
+    return $http({
+      method: 'PUT',
+      url: base_url + '/orderForm/make',
+      data: params
+    }).success(function(data, status, headers, config){
+
+    })
+  }
+
+  spaService.getOrderForm = function(){
+    var params = {};
+    params = addCookie(params);
+    return $http({
+      method: 'GET',
+      url: base_url + '/orderForm/current',
+      params: params
+    }).success(function(data, status, headers, config){
+
+    })
+  }
 
 
 

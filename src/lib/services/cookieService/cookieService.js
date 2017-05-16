@@ -7,7 +7,6 @@ angular.module('myWeb').provider('cookieService',{
       var token = that.getCookie('man')
       if(token){
         spaService.getCurrent_user({token: token})
-        spaService.getCarts();
       }
     }
 

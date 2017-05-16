@@ -199,5 +199,33 @@ angular.module('myWeb.lib.directive').config(['$mdToastProvider',function($mdToa
       };
     }
   });
+  $mdToastProvider.addPreset('editUserSuccess', {
+    options: function() {
+      return {
+        template:
+          '<md-toast>' +
+            '<div class="md-toast-content" style="background-color: green;">' +
+              '用户修改成功！' +
+            '</div>' +
+          '</md-toast>',
+        position: config.position,
+        hideDelay: config.delay
+      };
+    }
+  });
+  $mdToastProvider.addPreset('editUserError', {
+    options: function() {
+      return {
+        template:
+          '<md-toast>' +
+            '<div class="md-toast-content" style="background-color: red;">' +
+              '修改用户错误！' +
+            '</div>' +
+          '</md-toast>',
+        position: config.position,
+        hideDelay: config.delay
+      };
+    }
+  });
 
 }])

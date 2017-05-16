@@ -48,6 +48,9 @@ angular.module('myWeb.module.home.detail').run(['$state',function($state){
 
 angular.module('myWeb.module.home.detail').filter('cut',function(){
   return function(input,n){
-    return input.toFixed(n)
+    if(typeof input == 'number')
+      return input.toFixed(n)
+    else if(typeof input == 'string')
+      return input.substring(0,n);
   }
 })

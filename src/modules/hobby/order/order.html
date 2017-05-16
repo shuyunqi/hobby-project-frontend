@@ -1,0 +1,10 @@
+<nav class="navbar navbar-default myNav">
+  <ul style="list-style: none;">
+    <li>
+      <span class="nav-btn" ng-click="goHome()" style="cursor: pointer;">返回</span>
+    </li>
+    <li>
+      <span  class="nav-btn" ng-click="" ng-if="data.current_user.id">{{data.current_user.name?data.current_user.name:data.current_user.email}}</span>
+    </li>
+  </ul>
+</nav>

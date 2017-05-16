@@ -19,10 +19,18 @@ angular.module('myWeb.lib.service.asyncService').provider('asyncService',{
         spaService.getBooks({id:params.bookId});
       }
     }
+    function getData_order(params){
+      spaService.getOrderForm();
+      spaService.getConsignees();
+    }
 
     function _asyncPage(state,params,fromState){
       if(!fromState.name){
         //shuaxin
+      }
+
+      if(state !=='order'){
+        spaService.getCarts();
       }
       switch(state){
         case 'hobby_index.home':{
@@ -36,6 +44,9 @@ angular.module('myWeb.lib.service.asyncService').provider('asyncService',{
         case 'admin_index':{
           getData_home(params);
           break;
+        }
+        case 'order':{
+          getData_order(params);
         }
         default :
           break;

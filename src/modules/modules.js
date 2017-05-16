@@ -6,5 +6,6 @@ angular.module('myWeb.module',[
   'myWeb.module.home',
   'myWeb.module.tuijian',
   'myWeb.module.admin',
-  'myWeb.module.login'
+  'myWeb.module.login',
+  'myWeb.module.order'
 ]);

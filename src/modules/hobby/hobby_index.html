@@ -5,7 +5,7 @@
     <ul style="list-style: none;">
       <li>
         <span  class="nav-btn" ng-click="loginModal();" ng-if="!data.current_user.id">登陆</span>
-        <span  class="nav-btn" ng-click="" ng-if="data.current_user.id">{{data.current_user.email}}</span>
+        <span  class="nav-btn" ng-click="" ng-if="data.current_user.id">{{data.current_user.name?data.current_user.name:data.current_user.email}}</span>
       </li>
       <li>
         <span class="nav-btn" ng-click="goState('search')" style="cursor: pointer;">首页</span>
@@ -39,57 +39,91 @@
     <div class="side-cell2" ng-click="openSidenav('gouwuche')">   <md-icon class="side-icon2" md-svg-icon="cart">  </md-icon><span>购物车</span></div>
     <div class="side-cell3" ng-click="openSidenav('dingdan')">    <md-icon class="side-icon3" md-svg-icon="order"> </md-icon><span>我的订单</span></div>
   </div>
+</div>
 
-<md-sidenav style="margin-top: 50px;" class="md-sidenav-left " md-component-id="gerenziliao"
-                md-disable-backdrop md-whiteframe="4">
+<md-sidenav style="margin-top: 50px;margin-bottom: 30px;" class="md-sidenav-left " md-component-id="gerenziliao"
+                md-disable-backdrop md-whiteframe="4" layout="column">
 
-<!--   <md-toolbar class="md-theme-indigo">
-        <h1 class="md-toolbar-tools">Disabled Backdrop</h1>
-      </md-toolbar> -->
-  <div class="sidenav-title">
-    <span>{{data.current_user.name?data.current_user.name:data.current_user.email}}</span><span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('gerenziliao')"></span>
+  <div class="sidenav-title" flex="10">
+    <span>{{data.current_user.name?data.current_user.name:data.current_user.email}}</span>
+    <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('gerenziliao')"></span>
   </div>
-  <md-content layout-margin ng-if="!show_change_password && !show_change_username">
-    <md-button md-no-ink class="md-primary" ng-click="changePassword();">修改密码</md-button>
-    <md-button md-no-ink class="md-primary" ng-click="changeUsername();" >修改用户名</md-button>
-  </md-content>
+  <md-content layout-margin style="margin: 0px;" flex="80">
+    <div ng-if="!show_change_password && !show_change_username">
+      <md-button md-no-ink class="md-primary" ng-click="changePassword();">修改密码</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="changeUsername();" >修改用户名</md-button>
+      <md-divider></md-divider>
+      <md-button style="width: 95%;" ng-click="changeConsignee();"><span class="glyphicon glyphicon-plus"></span>新增收货地址</md-button>
+      <div ng-repeat="consignee in data.current_consignees" layout='column'>
+        <div layout="row" layout-align="center center">
+          <h4 flex="90">{{consignee.name}} </h4>
+          <span class="glyphicon glyphicon-trash mb-icon-sm"></span>
+        </div>
+        <div style="margin-left: 10px;">
+          电话：{{consignee.phone}}
+        </div>
+        <div style="margin-left: 10px;">
+          地址： {{consignee.address}}
+        </div>
+        <md-divider></md-divider>
+      </div>
 
-  <md-content layout-margin ng-if="show_change_password">
-    <div style="margin-left: 70px;">
-      <md-input-container class="login-input" >
-        <label>&nbsp;原&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
-        <input ng-model="change_passwd.old_passwd" type="password">
-      </md-input-container>
-      <md-input-container class="login-input" >
-        <label>&nbsp;新&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
-        <input ng-model="change_passwd.passwd" type="password">
-      </md-input-container>
-      <md-input-container class="login-input" >
-        <label>确&nbsp;认&nbsp;密&nbsp;码</label>
-        <input ng-model="change_passwd.rePasswd" type="password">
-      </md-input-container>
     </div>
-    <ul>
-      <md-button md-no-ink class="md-primary" ng-click="confirmChangePassword();">确定</md-button>
-      <md-button md-no-ink class="md-primary" ng-click="cancelChangePassword();" >取消</md-button>
-    </ul>
-  </md-content>
-  <md-content layout-margin ng-if="show_change_username" >
-    <div style="margin-left: 70px;">
-      <md-input-container class="login-input" >
-        <label>新用户名</label>
-        <input ng-model="change_passwd.username">
-      </md-input-container>
+    <div ng-if="show_change_password">
+      <div style="margin-left: 70px;" >
+        <md-input-container class="login-input" >
+          <label>&nbsp;原&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
+          <input ng-model="change_passwd.old_passwd" type="password">
+        </md-input-container>
+        <md-input-container class="login-input" >
+          <label>&nbsp;新&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
+          <input ng-model="change_passwd.passwd" type="password">
+        </md-input-container>
+        <md-input-container class="login-input" >
+          <label>确&nbsp;认&nbsp;密&nbsp;码</label>
+          <input ng-model="change_passwd.rePasswd" type="password">
+        </md-input-container>
+      </div>
+      <ul>
+        <md-button md-no-ink class="md-primary" ng-click="confirmChangePassword();">确定</md-button>
+        <md-button md-no-ink class="md-primary" ng-click="cancelChangePassword();" >取消</md-button>
+      </ul>
     </div>
-    <ul>
-      <md-button md-no-ink class="md-primary" ng-click="confirmChangeUsername()">确定</md-button>
-      <md-button md-no-ink class="md-primary" ng-click="cancelChangeUsername()" >取消</md-button>
-    </ul>
+    <div ng-if="show_change_username" >
+      <div style="margin-left: 70px;">
+        <md-input-container class="login-input" >
+          <label>新用户名</label>
+          <input ng-model="change_passwd.username">
+        </md-input-container>
+      </div>
+      <ul>
+        <md-button md-no-ink class="md-primary" ng-click="confirmChangeUsername()">确定</md-button>
+        <md-button md-no-ink class="md-primary" ng-click="cancelChangeUsername()" >取消</md-button>
+      </ul>
+    </div>
+
+    <div ng-if="show_add_cinsignee">
+      <md-input-container class="md-block" flex-gt-xs>
+        <label>收货人昵称</label>
+        <input ng-model="consignee.name">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-xs>
+        <label>收货人电话</label>
+        <input ng-model="consignee.phone">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-xs>
+        <label>收货人地址</label>
+        <input ng-model="consignee.address">
+      </md-input-container>
+      <ul>
+        <md-button md-no-ink class="md-primary" ng-click="confirmChangeConsignee()">确定</md-button>
+        <md-button md-no-ink class="md-primary" ng-click="cancelChangeConsignee()" >取消</md-button>
+      </ul>
+    </div>
   </md-content>
 </md-sidenav>
 
-<md-sidenav style="margin-top: 50px;margin-bottom: 30px;" class="md-sidenav-left " md-component-id="gouwuche"
-                md-disable-backdrop md-whiteframe="4" layout="column">
+<md-sidenav class="md-sidenav" md-component-id="gouwuche" md-disable-backdrop md-whiteframe="4" layout="column">
   <div class="sidenav-title" flex="10">
     <span> 购物车 </span>
     <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('gouwuche')"></span>
@@ -127,22 +161,20 @@
       </md-checkbox>
     </span>
     <span class="text">总价: {{caculatePrice() | cut: 2}}({{selected.length}})</span>
-    <span class="mb-buy">结算</span>
+    <span class="mb-buy" ng-click="goOrder()">结算</span>
   </div>
 </md-sidenav>
 
-<md-sidenav style="margin-top: 50px;" class="md-sidenav-left " md-component-id="dingdan"
-                md-disable-backdrop md-whiteframe="4">
-  <div class="sidenav-title">
+<md-sidenav  class="md-sidenav" md-component-id="dingdan"
+                md-disable-backdrop md-whiteframe="4" layout="column">
+  <div class="sidenav-title" flex="10">
     <span>订单</span>
     <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('dingdan')"></span>
   </div>
-  <md-content layout-margin >
+  <md-content layout-margin flex="90">
     <p>
       dingdan
     </p>
   </md-content>
 </md-sidenav>
-
-</div>
 

@@ -20,7 +20,8 @@ angular.module('myWeb.lib.directive.uiBook').directive('uiBook',['$state','stora
     link:function(scope, element, attrs, ctrl, transclude){
       var admin = scope.admin?scope.admin:false;
       var current_carts = storageService.getData('current_carts');
-
+      // scope.book.price = (scope.book.price&&scope.book.price.indexOf('￥')>=0)?scope.book.price.substring(1):scope.book.price;
+      // scope.image_src = scope.book.images?scope.book.images:'/images/夜莺.jpg';
       if(current_carts){
         current_carts.forEach(function(c){
           if(c &&c.id == scope.book.id){

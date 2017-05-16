@@ -106,6 +106,7 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
   $scope.openSidenav = function(componentId){
     $scope.show_change_username = false;
     $scope.show_change_password = false;
+    $scope.change_passwd ={};
     var componentArr = ['gerenziliao','gouwuche','dingdan'];
     angular.forEach(componentArr,function(cpt){
       $mdSidenav(cpt).close();
@@ -121,23 +122,60 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
 
   $scope.show_change_username = false;
   $scope.show_change_password = false;
+  $scope.show_add_cinsignee = false;
   $scope.changePassword = function(){
     $scope.show_change_password = true;
+    $scope.show_add_cinsignee = false;
   }
   $scope.changeUsername = function(){
     $scope.show_change_username = true;
+    $scope.show_add_cinsignee = false;
   }
+  $scope.changeConsignee = function(){
+    $scope.show_add_cinsignee = true;
+    $scope.consignee={};
+  }
+  $scope.change_passwd ={};
   $scope.confirmChangePassword = function(){
     $scope.show_change_password = false;
+    if($filter('check')($scope.change_passwd.passwd,'password',$scope.change_passwd.rePasswd)){
+      spaService.editUser('mine',{passwd:$scope.change_passwd.old_passwd},{passwd:$scope.change_passwd.passwd})
+    }else{
+      $mdToast.show(
+        $mdToast.editUserError()
+      );
+    }
+    $scope.change_passwd ={};
   }
   $scope.cancelChangePassword = function(){
     $scope.show_change_password = false;
+    $scope.change_passwd ={};
   }
   $scope.confirmChangeUsername = function(){
     $scope.show_change_username = false;
+    spaService.editUser('mine',null,{name:$scope.change_passwd.username});
   }
   $scope.cancelChangeUsername = function(){
     $scope.show_change_username = false;
+  }
+  $scope.confirmChangeConsignee = function(){
+    $scope.show_add_cinsignee = false;
+    console.log($scope.consignee);
+    spaService.addConsignee($scope.consignee);
+  }
+  $scope.cancelChangeConsignee = function(){
+    $scope.show_add_cinsignee = false;
+  }
+
+  $scope.goOrder = function(){
+    if($scope.selected.length == 0){
+
+    }else{
+      spaService.addOrderForm($scope.selected).then(function(){
+        window.location.href='http://localhost:3000/#/order';
+
+      });
+    }
   }
 
   $scope.caculateFrame = function(){
@@ -181,7 +219,6 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
   $scope.caculatePrice = function(){
     if($scope.selected.length>1){
       var price = $scope.selected.reduce(function(b1,b2,index){
-        console.log(b1,b2,index)
         if(index === 1)
           b1 = b1.price*b1.discount;
         var p2 = b2.price*b2.discount;

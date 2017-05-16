@@ -18,10 +18,11 @@ function searchCtrl($mdSidenav,$scope,$timeout,$filter,$state,$http,$modal,spaSe
   $scope.isThisNet = false;
 
   $scope.search = function(data){
-    console.log(data);
     spaService.search({
       data:data,
       search: $scope.isThisNet?'My':'All'
+    }).then(function(){
+      $state.go('hobby_index.home',{type:'search'})
     })
   }
 };

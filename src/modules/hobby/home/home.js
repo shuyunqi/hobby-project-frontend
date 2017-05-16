@@ -11,7 +11,14 @@ angular.module('myWeb.module.home').config(['$stateProvider', function($statePro
       templateUrl: 'hobby/home/home.html',
       controller: ['$mdSidenav','$scope','$timeout','$filter','$state','$http','$modal', 'spaService', 'storageService', homeCtrl]
     });
+
 }]);
+
+// angular.module('myWeb.module.home').run(['$rootScope',function($rootScope){
+//   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+//       console.log(toState, toParams, fromState, fromParams)
+//   });
+// }])
 
 function homeCtrl($mdSidenav,$scope,$timeout,$filter,$state,$http,$modal,spaService, storageService){
 

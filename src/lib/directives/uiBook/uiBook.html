@@ -11,9 +11,9 @@
 </md-card> -->
 
 <div class="my-book md-whiteframe-5dp" ng-click="choseBook()">
-  <div class="mb-pic"><img style="" ng-src="/images/夜莺.jpg" /></div>
+  <div class="mb-pic"><img style="width: 150px;height: 150px;" ng-src="./images/夜莺.jpg" /></div>
   <div class="mb-title">
-    {{book.name}}
+    {{book.name | cut:8 }}
   </div>
   <div class="form-group" style="margin-left: 20px;margin-right: 20px;" ng-if="!admin">
     <md-icon >

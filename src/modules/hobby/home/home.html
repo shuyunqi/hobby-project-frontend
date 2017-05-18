@@ -1,4 +1,6 @@
 <div style="width: 100%" ng-if='!showDetail'>
+
+  <div ng-if="data.books[0].from" class="text-context" style="position: fixed;top:10px;margin-left: 15%; color: white;">搜索结果来自 亚马逊</div>
   <div>
     <ul class="mb-list">
       <li ng-repeat = 'book in data.books | cutBooks: page' class="book-list" >

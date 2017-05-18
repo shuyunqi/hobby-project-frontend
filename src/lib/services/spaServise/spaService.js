@@ -244,10 +244,12 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
       params: what
     }).success(function(data, status, headers, config){
       if(data.length>0){
-        data.forEach(function(b){
-          b.discount = b.discount?b.discount:1;
-          b.from = 'search';
-        })
+        if(what.search=="All"){
+          data.forEach(function(b){
+            b.discount = b.discount?b.discount:1;
+            b.from = 'search';
+          })
+        }
         storageService.saveData('books',data);
       }
     }).error(function(data, status, headers, config){

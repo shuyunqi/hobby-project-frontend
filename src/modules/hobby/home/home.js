@@ -36,7 +36,8 @@ function homeCtrl($mdSidenav,$scope,$timeout,$filter,$state,$http,$modal,spaServ
     if(sign==='left'&&$scope.page>1){
       $scope.page = $scope.page - 1;
     }else if(sign==='right'){
-      $scope.page = $scope.page + 1;
+      if($filter('cutBooks')($scope.data.books,$scope.page+1).length>0)
+        $scope.page = $scope.page + 1;
     }
   }
 }

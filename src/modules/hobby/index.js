@@ -9,14 +9,14 @@ angular.module('myWeb.module.hobby').config(['$stateProvider','$mdThemingProvide
     .state('hobby_index', {
       url: "/hobby",
       templateUrl: 'hobby/hobby_index.html',
-      controller: ['$scope','$timeout','$filter','$state','$http','$modal', '$mdSidenav', '$mdToast', 'stateService', 'spaService', 'storageService', indexCtrl]
+      controller: ['$scope','$timeout','$filter','$state','$http','$modal', '$mdSidenav', '$mdToast', 'stateService', 'spaService', 'storageService', 'hobbySetting', indexCtrl]
     });
 
   $mdThemingProvider.theme('docs-dark', 'default')
     .primaryPalette('yellow');
 }]);
 
-function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdToast, stateService, spaService, storageService){
+function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdToast, stateService, spaService, storageService,hobbySetting){
   //default setting
   $scope.register = false;
   $scope.showUser = false;
@@ -160,7 +160,6 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
   }
   $scope.confirmChangeConsignee = function(){
     $scope.show_add_cinsignee = false;
-    console.log($scope.consignee);
     spaService.addConsignee($scope.consignee);
   }
   $scope.cancelChangeConsignee = function(){
@@ -172,10 +171,14 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
 
     }else{
       spaService.addOrderForm($scope.selected).then(function(){
-        window.location.href='http://localhost:3000/#/order';
-
+        window.location.reload();
+        window.location.href= hobbySetting.order_url + '/'+$scope.data.current_orderForm.order_account;
       });
     }
+  }
+  $scope.conetinueOrder = function(order){
+    window.location.reload();
+    window.location.href= hobbySetting.order_url + '/'+order.order_account;
   }
 
   $scope.caculateFrame = function(){
@@ -184,7 +187,18 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
     return { 'height': height+ 'px', 'width': width + 'px'  }
   }
 
+  $scope.checkNum = function(item){
+    if(item.amount==0){
+      item.amount = 1;
+    }
+  }
 
+  $scope.deleteCart = function(cart){
+    spaService.deleteCart(cart);
+  }
+  $scope.deleteConsignee =function(consignee){
+    spaService.deleteConsignee(consignee);
+  }
 
   //check box
   $scope.selected = [];
@@ -220,13 +234,13 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
     if($scope.selected.length>1){
       var price = $scope.selected.reduce(function(b1,b2,index){
         if(index === 1)
-          b1 = b1.price*b1.discount;
-        var p2 = b2.price*b2.discount;
+          b1 = b1.price*b1.discount*b1.amount;
+        var p2 = b2.price*b2.discount*b2.amount;
         return b1+p2;
       });
       return price;
     }else if($scope.selected.length == 1){
-      return $scope.selected[0].price * $scope.selected[0].discount;
+      return $scope.selected[0].price * $scope.selected[0].discount* $scope.selected[0].amount;
     }else{
       return 0;
     }
@@ -241,6 +255,27 @@ angular.module('myWeb.module.hobby').filter('default',function(){
   return function(input,defaultNum){
     if(!input){
       return defaultNum;
+    }
+  }
+})
+
+angular.module('myWeb.module.hobby').filter('showOrderStatus',function(){
+  return function(input){
+    if(input){
+      switch(input){
+        case '0':{
+          return '未完成';break;
+        }
+        case '1' :{
+          return '未付款';break;
+        }
+        case '2' : {
+          return '已完成';break;
+        }
+        default:
+          return false;
+          break;
+      }
     }
   }
 })

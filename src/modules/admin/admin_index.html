@@ -25,6 +25,11 @@
             <h4 ng-class="{ 'select_item': sw_option == 'add_book'}">添加商品</h4>
           </div>
         </md-list-item>
+        <md-list-item class="md-1-line" ng-click="sw_option= 'order_options'">
+          <div class="md-list-item-text" layout="column">
+            <h4 ng-class="{ 'select_item': sw_option == 'order_options'}">订单管理</h4>
+          </div>
+        </md-list-item>
         <md-divider ></md-divider>
       </md-list>
     </div>
@@ -110,6 +115,35 @@
             </md-content>
           </md-tab> -->
         </md-tabs>
+      </div>
+      <div ng-if="sw_option == 'order_options'" layout="column">
+        <div style="width: 90%; margin: 20px auto;background-color: white;padding: 10px;" ng-repeat="order in data.orderForm" class="md-whiteframe-4dp" layout="column">
+          <div layout="row" layout-align="space-between center">
+            <div>订单编号:{{order.order_account}}</div>
+            <div>用户: {{order.user.name?order.user.name:order.user.email}}</div>
+          </div>
+          <div class="text-context">
+            订单物品:
+          </div>
+          <md-divider></md-divider>
+          <div layout="row" layout-align="space-around center">
+            <div style="visibility: none;"></div>
+            <div>名称</div>
+            <div>数量</div>
+            <div>总价</div>
+          </div>
+          <div layout="row" ng-repeat="book in order.books" layout-align="space-around center" class="text-context">
+            <img style="width: 60px;height: 60px;" src="./images/夜莺.jpg" />
+            <div>{{book.name}}</div>
+            <div>{{book.amount}}</div>
+            <div>￥{{book.amount*book.price*book.discount |cut:2}}</div>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row">
+            <div class="text-context">状态:</div>
+            <div class="text-context" ng-class="{'done-text': order.status=='2','doing-text':order.status=='1'||order.status=='0'}">{{order.status | showOrderStatus }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

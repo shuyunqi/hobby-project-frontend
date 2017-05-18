@@ -31,27 +31,32 @@ angular.module('myWeb.lib.service.storageService').service('storageService',['$q
         if(_cache[what]){
             _cache[what] = _cache[what].filter(function(value){
                 var sign = 0;
-                for(var key in criteria){
-                    sign  = sign + 1;
-                    // console.log(value[key],criteria[key])
-                    if(value[key] == criteria[key]){
-                        // console.log('sssss')
-                        sign = sign - 1;
+                if(!criteria)
+                    return false;
+                else{
+                    for(var key in criteria){
+                        sign  = sign + 1;
+                        if(value[key] == criteria[key]){
+                            sign = sign - 1;
+                        }
+                    }
+                    if(!sign){
+                        return false;
+                    }else{
+                        return true;
                     }
                 }
-                console.log(sign)
-                if(!sign){
-                    return false;
-                }else{
-                    return true;
-                }
             })
-            console.log(_cache[what])
         }
     }
     var _addData = function(what,obj){
         if(_cache[what]){
-            _cache[what].push(obj);
+            if(Object.keys(obj).length>0)
+                _cache[what].push(obj);
+        }else{
+            _cache[what]=[];
+            if(Object.keys(obj).length>0)
+                _cache[what].push(obj);
         }
     }
     return {

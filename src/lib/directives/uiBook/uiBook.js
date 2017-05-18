@@ -19,16 +19,58 @@ angular.module('myWeb.lib.directive.uiBook').directive('uiBook',['$state','stora
     templateUrl:'directives/uiBook/uiBook.html',
     link:function(scope, element, attrs, ctrl, transclude){
       var admin = scope.admin?scope.admin:false;
-      var current_carts = storageService.getData('current_carts');
-      // scope.book.price = (scope.book.price&&scope.book.price.indexOf('￥')>=0)?scope.book.price.substring(1):scope.book.price;
-      // scope.image_src = scope.book.images?scope.book.images:'/images/夜莺.jpg';
-      if(current_carts){
-        current_carts.forEach(function(c){
-          if(c &&c.id == scope.book.id){
-            scope.in_cart = true;
-          }
+      // var current_carts = storageService.getData('current_carts');
+
+      scope.$watch(function(){
+        return scope.book;
+      },function(newValue,oldValue){
+        if(newValue.images){
+          scope.img_url = newValue.images
+        }else{
+          scope.img_url = './images/夜莺.jpg';
+        }
+      });
+      scope.$watch(function(){
+        return storageService.checkData('current_carts');
+      },function(newValue,oldValue){
+        if(newValue){
+          var current_carts = storageService.getData('current_carts');
+          current_carts.forEach(function(c){
+            if(c &&c.id == scope.book.id){
+              scope.in_cart = true;
+            }
+          })
+        }
+        // console.log(current_carts)
+        // if(newValue && scope.book){
+        //   console.log('111111111')
+        //   newValue.forEach(function(c){
+        //     if(c &&c.id == scope.book.id){
+        //       scope.in_cart = true;
+        //     }
+        //   })
+        // }
+      })
+
+      scope.editBook = function(ev){
+        $mdDialog.show({
+          controller: bookCtrl,
+          templateUrl: 'directives/uiBook/editBook.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose:true,
+          fullscreen: true
         })
-      };
+
+        function bookCtrl($scope, $mdDialog){
+          $scope.edit_book = angular.copy(scope.book);
+          $scope.closeDialog = function() {
+            $mdDialog.hide();
+          }
+          $scope.addConsigneeData = function(data){
+          }
+        }
+      }
 
       scope.choseBook = function(ev){
         // console.log('2222222')

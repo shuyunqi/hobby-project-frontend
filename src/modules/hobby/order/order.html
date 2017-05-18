@@ -1,10 +1,194 @@
-<nav class="navbar navbar-default myNav">
-  <ul style="list-style: none;">
-    <li>
-      <span class="nav-btn" ng-click="goHome()" style="cursor: pointer;">返回</span>
-    </li>
-    <li>
-      <span  class="nav-btn" ng-click="" ng-if="data.current_user.id">{{data.current_user.name?data.current_user.name:data.current_user.email}}</span>
-    </li>
-  </ul>
-</nav>
+<div layout="column">
+  <nav class="navbar navbar-default myNav">
+    <ul style="list-style: none;">
+      <li>
+        <span class="nav-btn" ng-click="goHome()" style="cursor: pointer;">返回</span>
+      </li>
+      <li>
+        <span  class="nav-btn" ng-click="" ng-if="data.current_user.id">{{data.current_user.name?data.current_user.name:data.current_user.email}}</span>
+      </li>
+    </ul>
+  </nav>
+
+  <div flex style="height: 200px;" layout="row">
+    <div flex="30" layout="row" layout-align="center center">
+      <div class="myLogo-sm">hobby</div>
+      <span class="myLogo_label-sm">订单</span>
+    </div>
+    <div flex="70" layout="column" layout-align="center none">
+      <div flex layout="row" layout-align="center end">
+        <div class="circle-sm" ng-class="{ 'done':step>1,'doing':step==1 }"></div>
+        <div class="line-bold" ng-class="{ 'done':step>1,'doing':step==2 }"></div>
+        <div class="circle-sm" ng-class="{ 'done':step>2,'doing':step==2 }"></div>
+        <div class="line-bold" ng-class="{ 'done':step>2,'doing':step==3 }"></div>
+        <div class="circle-sm" ng-class="{ 'done':step>3,'doing':step==3 }"></div>
+      </div>
+      <div flex layout="row" layout-align="center start">
+        <div class="line-text" ng-class="{ 'done-text':step>1,'doing-text':step==1 }">
+          确认物品
+        </div>
+        <div class="line-text" ng-class="{ 'done-text':step>2,'doing-text':step==2 }">
+          选择收货地址
+        </div>
+        <div class="line-text" ng-class="{ 'done-text':step>3,'doing-text':step==3 }">
+          生成订单
+        </div>
+      </div>
+    </div>
+  </div>
+  <md-divider flex></md-divider>
+  <div flex style="padding-left: 20px;padding-right: 20px;" layout="column" ng-if="step==1">
+    <div class="classTitle">
+      请确认订单物品
+    </div>
+    <md-divider style="width: 200px;"></md-divider>
+    <ul style="list-style: none;padding: 0px;margin: 0px;">
+      <li ng-repeat = "book in data.orderForm[0].books" style="margin-left: 50px;margin-right: 50px;margin-top: 20px;">
+        <div layout="row" style="height: 150px;width: 100%;margin-bottom: 15px;">
+          <div>
+            <img style="width: 150px;height: 150px;" src="./images/夜莺.jpg" />
+          </div>
+          <div flex layout="column" layout-align="center none">
+            <div flex="40" class="text-title">{{book.name}}</div>
+            <div flex="60" layout="row" layout-align="space-around center">
+              <div class="text-context">作者:{{book.author}}</div>
+              <div class="text-context">出版社:{{book.pubishHouse}}</div>
+            </div>
+          </div>
+          <div flex="10" layout="column" layout-align="space-around center">
+            <div class="text-context">价格:￥{{book.price}}</div>
+            <div class="text-context">折扣:{{book.discount*10 |cut:2}}折</div>
+            <div class="text-context">数量:{{book.amount}}</div>
+          </div>
+          <div flex="10" class="text-price" layout="row" layout-align="center center">
+            <div class="price-label">总价:</div>
+            <div class="price-body">
+               ￥{{book.amount * book.price * book.discount | cut:2 }}
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div layout="row" layout-align="end center">
+      <div flex="20" class="text-price" layout="row" layout-align="center center">
+        <div class="price-label">共计:</div>
+        <div class="price-body">
+           ￥{{ caculatePrice() | cut:2 }}
+        </div>
+      </div>
+      <md-button class="md-raised md-warn" ng-click="nextStep()"><span class="glyphicon glyphicon-arrow-right"></span>下一步</md-button>
+    </div>
+  </div>
+  <div flex style="padding-left: 20px;padding-right: 20px;" layout="column" ng-if="step==2">
+    <div layout="row" >
+      <div flex="90" class="classTitle">选择收货地址</div>
+      <div class="classTitle" style="cursor: pointer;" ng-click="addConsignee($event)"><span class="glyphicon glyphicon-plus"></span>新增</div>
+    </div>
+    <md-divider style="width: 200px;"></md-divider>
+    <ul style="list-style: none;padding: 0px;margin: 0px;">
+      <li ng-repeat = "consignee in data.current_consignees" style="margin-left: 50px;margin-right: 50px;margin-top: 20px;">
+        <div layout="row" style="height: 100px;width: 100%;margin-bottom: 15px;">
+          <div flex="10" layout = "column" layout-align="center center">
+            <md-checkbox ng-model="consignee.selected" ng-change="checkSelect(consignee)" aria-label="{{consignee.id}}"></md-checkbox>
+          </div>
+          <div flex layout = "column" layout-align="center none">
+            <div flex layout = "row" layout-align="space-around center">
+              <div class="text-context">收件人姓名:{{consignee.name}}</div>
+              <div class="text-context">收件人电话:{{consignee.phone}}</div>
+            </div>
+            <div flex class="text-context">收件地址:{{consignee.address}}</div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div layout="row" >
+      <div flex="90" class="classTitle">选择付款方式:</div>
+    </div>
+    <div layout="row" layout-align="space-around center">
+      <md-checkbox ng-model="pay.wechat.selected" ng-change="checkPay('wechat')" aria-label="wechat"><div class="text-context">{{pay.wechat.title}}</div></md-checkbox>
+      <md-checkbox ng-model="pay.alipay.selected" ng-change="checkPay('alipay')" aria-label="alipay"><div class="text-context">{{pay.alipay.title}}</div></md-checkbox>
+      <md-checkbox ng-model="pay.card.selected" ng-change="checkPay('card')" aria-label="card"><div class="text-context">{{pay.card.title}}</div></md-checkbox>
+    </div>
+    <div layout="row" layout-align="space-between center">
+      <md-button class="md-raised md-warn" ng-click="lastStep()"><span class="glyphicon glyphicon-arrow-left"></span>上一步</md-button>
+      <md-button class="md-raised md-warn" ng-click="nextStep()"><span class="glyphicon glyphicon-arrow-right"></span>下一步</md-button>
+    </div>
+  </div>
+  <div flex style="padding-left: 20px;padding-right: 20px;" layout="column" ng-if="step==3">
+    <div class="md-whiteframe-6dp" style="width: 800px;margin: 0px auto;background-color: #f4f4f4;margin-top: 50px;padding: 10px;" layout="column">
+      <div>
+        订单编号: {{data.orderForm[0].order_account}}
+      </div>
+      <div style="padding: 20px;">
+        <div style="font-size: 16px;">统计：</div>
+        <ul style="list-style: none;margin: 0px;padding: 10px;">
+          <li ng-repeat = "book in data.orderForm[0].books">
+            <div layout="row" style="height: 100px;width: 100%;margin-bottom: 15px;">
+              <div>
+                <img style="width: 100px;height: 100px;" src="./images/夜莺.jpg" />
+              </div>
+              <div flex layout="column" layout-align="center none">
+                <div flex="60" class="text-title">{{book.name}}</div>
+                <div flex="40" layout="row" layout-align="space-around center">
+                  <div class="text-context">{{book.author}}</div>
+                  <div class="text-context">{{book.pubishHouse}}</div>
+                </div>
+              </div>
+              <div flex="20" layout="column" layout-align="space-around center">
+                <div class="text-context">单价:￥{{book.price*book.discount | cut:2}}</div>
+              </div>
+              <div flex="20" layout="column" layout-align="space-around center">
+                <div class="text-context">数量:{{book.amount}}</div>
+              </div>
+              <div flex="10" class="text-price" layout="row" layout-align="center center">
+                <div class="price-label">总价:</div>
+                <div class="price-body">
+                   ￥{{book.amount * book.price * book.discount | cut:2 }}
+                </div>
+              </div>
+            </div>
+            <md-divider></md-divider>
+          </li>
+        </ul>
+        <div flex class="text-price" layout="row" layout-align="end end">
+          <div class="price-label">共计:</div>
+          <div class="price-body">
+             ￥{{caculatePrice() | cut:2 }}
+          </div>
+        </div>
+        <div style="font-size: 16px;">收货人:</div>
+        <div ng-repeat="consignee in data.current_consignees" ng-if='consignee.selected'>
+          <div layout = "column" layout-align="center none">
+            <div flex layout = "row" layout-align="space-around center">
+              <div class="text-context">姓名:{{consignee.name}}</div>
+              <div class="text-context">电话:{{consignee.phone}}</div>
+            </div>
+            <div flex class="text-context">收件地址:{{consignee.address}}</div>
+          </div>
+        </div>
+        <div style="font-size: 16px;">付款方式:</div>
+        <div ng-repeat="p in pay" ng-if='p.selected'>
+          <div class="text-context" style="margin-left: 100px;">{{p.title}}</div>
+        </div>
+      </div>
+    </div>
+    <div layout="row" layout-align="space-between center">
+      <md-button class="md-raised md-warn" ng-click="lastStep()"><span class="glyphicon glyphicon-arrow-left"></span>上一步</md-button>
+      <md-button class="md-raised md-warn" ng-click="commitOrderForm()"><span class="glyphicon glyphicon-arrow-right"></span>提交订单</md-button>
+    </div>
+  </div>
+  <div flex style="padding-left: 20px;padding-right: 20px;" layout="column" ng-if="step==4">
+    <div>
+      <div class="classTitle" style="color: green;">完成支付</div>
+    </div>
+    <md-divider style="width: 200px;"></md-divider>
+    <div style="width: 400px;height: 250px;margin: 0px auto;" class="md-whiteframe-3dp" layout="column" layout-align="center center">
+      <md-button class="md-raised md-primary" ng-click="payOrder()">
+        完成支付
+      </md-button>
+    </div>
+    <div layout="row" layout-align="center center">
+      <md-button class="md-raised md-primary" ng-click="goHome()">确认，返回继续浏览</md-button>
+    </div>
+  </div>
+</div>

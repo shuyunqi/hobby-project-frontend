@@ -14,3 +14,9 @@ angular.module('myWeb').config(['$mdIconProvider', function($mdIconProvider) {
 
 
 }])
+
+angular.module('myWeb').value('hobbySetting',{
+  base_url: 'http://localhost:3010',
+  order_url: 'http://localhost:3000/#/order',
+  home_url: 'http://localhost:3000/#/hobby/home'
+})

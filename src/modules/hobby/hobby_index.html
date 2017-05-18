@@ -14,7 +14,7 @@
         <span  class="nav-btn" ng-click="signout();" ng-if="data.current_user.id">退出登陆</span>
       </li>
       <li>
-        <span class="nav-btn pull-right" ui-sref='admin_index' style="cursor: pointer;">管理员</span>
+        <span class="nav-btn pull-right" ui-sref='admin_index' style="cursor: pointer;" ng-if="data.current_user.level==0">管理员</span>
       </li>
     </ul>
   </nav>
@@ -54,10 +54,10 @@
       <md-button md-no-ink class="md-primary" ng-click="changeUsername();" >修改用户名</md-button>
       <md-divider></md-divider>
       <md-button style="width: 95%;" ng-click="changeConsignee();"><span class="glyphicon glyphicon-plus"></span>新增收货地址</md-button>
-      <div ng-repeat="consignee in data.current_consignees" layout='column'>
+      <div ng-repeat="consignee in data.current_consignees" layout='column' ng-if="!show_add_cinsignee">
         <div layout="row" layout-align="center center">
           <h4 flex="90">{{consignee.name}} </h4>
-          <span class="glyphicon glyphicon-trash mb-icon-sm"></span>
+          <span class="glyphicon glyphicon-trash mb-icon-sm" ng-click="deleteConsignee(consignee)"></span>
         </div>
         <div style="margin-left: 10px;">
           电话：{{consignee.phone}}
@@ -138,7 +138,7 @@
           <div style="padding: 10px;font-size: 18px;" flex="30">{{item.name}}</div>
           <div class="cart_number" flex="30">
             <md-chips ng-model="item.bookAmounts">
-              <input style='font-size: 20px;' type="number" ng-model="item.amount" ng-change='checkNum()'>
+              <input style='font-size: 20px;' type="number" ng-model="item.amount" ng-change='checkNum(item)'>
             </md-chips>
           </div>
           <div flex="40" layout="row" layout-align="center center">
@@ -172,9 +172,22 @@
     <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('dingdan')"></span>
   </div>
   <md-content layout-margin flex="90">
-    <p>
-      dingdan
-    </p>
+    <div ng-repeat="order in data.orderForm" layout="column" style="padding: 10px;" class="md-whiteframe-2dp">
+      <div>
+        订单编号:{{order.order_account}}
+      </div>
+      <div ng-repeat="book in order.books" layout="row" style="margin-top: 5px;margin-bottom: 5px;" layout-align="center center">
+        <img style="width: 50px;height: 50px;" src="./images/夜莺.jpg" />
+        <div flex="60">{{book.name}}</div>
+        <div flex="10">{{book.amount}}</div>
+      </div>
+      <div layout="row" layout-align="space-around center">
+        <div class="text-context">状态:</div>
+        <div class="text-context" ng-class="{'done-text': order.status=='2','doing-text':order.status=='1'||order.status=='0'}">{{order.status | showOrderStatus }}</div>
+        <md-button ng-click="conetinueOrder(order)" ng-if="order.status<2"><div class="text-context" style="color: orange;">继续订单</div></md-button>
+
+      </div>
+    </div>
   </md-content>
 </md-sidenav>
 

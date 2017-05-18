@@ -26,8 +26,8 @@ angular.module('myWeb').run([ '$rootScope','$modal', 'cookieService', 'asyncServ
     if(unfoundState.to==="no-state")
       event.preventDefault();
   });
-  cookieService.checkCookie();
-  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+    cookieService.checkCookie(toState.name);
     asyncService.asyncPage(toState.name, toParams, fromState);
   });
 }])

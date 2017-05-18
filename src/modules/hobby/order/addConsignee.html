@@ -1,0 +1,29 @@
+<md-dialog aria-label="addConsignee" style="width: 500px;height: 430px;">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>添加收货人</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="closeDialog()">
+        <span class="glyphicon glyphicon-remove"></span>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="padding: 30px;margin-top: 10px;">
+    <md-input-container class="md-block" flex-gt-xs>
+      <label>收货人昵称</label>
+      <input ng-model="consignee.name">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-xs>
+      <label>收货人电话</label>
+      <input ng-model="consignee.phone">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-xs>
+      <label>收货人地址</label>
+      <input ng-model="consignee.address">
+    </md-input-container>
+  </md-dialog-content>
+  <md-dialog-actions style="height: 60px;" layout="row" layout-align="space-around center">
+    <md-button class="md-primary" ng-click="closeDialog()" >取消</md-button>
+    <md-button class="md-primary" ng-click="addConsigneeData(consignee)">确定</md-button>
+  </md-dialog-actions>
+</md-dialog>

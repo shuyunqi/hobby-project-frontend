@@ -1,12 +1,16 @@
 'use strict'
 
 angular.module('myWeb').provider('cookieService',{
-  $get:['spaService',function(spaService){
+  $get:['spaService','storageService','hobbySetting',function(spaService,storageService,hobbySetting){
     var that = this;
-    var checkCookie = function(){
+    var checkCookie = function(state){
       var token = that.getCookie('man')
       if(token){
-        spaService.getCurrent_user({token: token})
+        spaService.getCurrent_user({token: token}).then(function(){
+          var user = storageService.getData('current_user');
+          if(state == 'admin_index' && user.level!=0)
+            window.location.href=hobbySetting.home_url;
+        })
       }
     }
 

@@ -8,7 +8,7 @@
         <span  class="nav-btn" ng-click="" ng-if="data.current_user.id">{{data.current_user.name?data.current_user.name:data.current_user.email}}</span>
       </li>
       <li>
-        <span class="nav-btn" ng-click="goState('search')" style="cursor: pointer;">首页</span>
+        <span class="nav-btn" ui-sref="hobby_index.search" style="cursor: pointer;">首页</span>
       </li>
       <li class="pull-right">
         <span  class="nav-btn" ng-click="signout();" ng-if="data.current_user.id">退出登陆</span>
@@ -25,13 +25,13 @@
 
   <div class="left-side-grp">
     <div class="side-cell" ng-click= goState('home')><md-icon class="side-icon" md-svg-icon="tuijian"></md-icon><span>推&nbsp;&nbsp;&nbsp;荐</span></div>
-    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="wenxue">  </md-icon><span>文学馆</span></div>
-    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="jiaoyu">  </md-icon><span>教育馆</span></div>
-    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="tongshu"> </md-icon><span>童书馆</span></div>
-    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="lizhi">   </md-icon><span>励志馆</span></div>
-    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="shenghuo"></md-icon><span>生活馆</span></div>
-    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="yishu">   </md-icon><span>艺术馆</span></div>
-    <div class="side-cell"><md-icon class="side-icon" md-svg-icon="keji">    </md-icon><span>科技馆</span></div>
+    <div class="side-cell" ng-click= goState('文学')><md-icon class="side-icon" md-svg-icon="wenxue">  </md-icon><span>文学馆</span></div>
+    <div class="side-cell" ng-click= goState('教育')><md-icon class="side-icon" md-svg-icon="jiaoyu">  </md-icon><span>教育馆</span></div>
+    <div class="side-cell" ng-click= goState('童书')><md-icon class="side-icon" md-svg-icon="tongshu"> </md-icon><span>童书馆</span></div>
+    <div class="side-cell" ng-click= goState('励志')><md-icon class="side-icon" md-svg-icon="lizhi">   </md-icon><span>励志馆</span></div>
+    <div class="side-cell" ng-click= goState('生活')><md-icon class="side-icon" md-svg-icon="shenghuo"></md-icon><span>生活馆</span></div>
+    <div class="side-cell" ng-click= goState('艺术')><md-icon class="side-icon" md-svg-icon="yishu">   </md-icon><span>艺术馆</span></div>
+    <div class="side-cell" ng-click= goState('科技')><md-icon class="side-icon" md-svg-icon="keji">    </md-icon><span>科技馆</span></div>
   </div>
 
   <div class="right-side-grp">
@@ -149,6 +149,9 @@
       </div>
       <md-divider ></md-divider>
     </div>
+    <div ng-if='data.current_carts.length==0||!data.current_carts'>
+      <div class="text-context" style="text-align: center;">购物车是空的</div>
+    </div>
   </md-content>
   <div class="sidenav-footer" flex="10">
     <span class="checkbox-selectAll">
@@ -187,6 +190,9 @@
         <md-button ng-click="conetinueOrder(order)" ng-if="order.status<2"><div class="text-context" style="color: orange;">继续订单</div></md-button>
 
       </div>
+    </div>
+    <div ng-if='data.orderForm.length==0||!data.orderForm'>
+      <div class="text-context" style="text-align: center;">没有订单</div>
     </div>
   </md-content>
 </md-sidenav>

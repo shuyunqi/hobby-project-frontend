@@ -14,7 +14,6 @@ angular.module('myWeb.module.admin').config(['$stateProvider','$mdThemingProvide
 function adminCtrl($scope, $timeout, $q, storageService,spaService){
   $scope.sw_option = 'in_store';
   $scope.data = storageService.getCache();
-  console.log($scope.data);
   $scope.getHeight = function(jian){
     var ba = 80;
     if(jian)
@@ -43,7 +42,6 @@ function adminCtrl($scope, $timeout, $q, storageService,spaService){
         removable: true
       }
     });
-    // console.log($scope.book);
   }
 }
 

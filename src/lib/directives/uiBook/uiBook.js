@@ -64,17 +64,21 @@ angular.module('myWeb.lib.directive.uiBook').directive('uiBook',['$state','stora
 
         function bookCtrl($scope, $mdDialog){
           $scope.edit_book = angular.copy(scope.book);
+          $scope.edit_book.pubishTime= new Date(scope.book.pubishTime);
           $scope.closeDialog = function() {
             $mdDialog.hide();
           }
-          $scope.addConsigneeData = function(data){
+          $scope.changeBook = function(data){
+            spaService.changeBook(data).then(function(){
+              $mdDialog.hide();
+            });
           }
         }
       }
 
       scope.choseBook = function(ev){
         // console.log('2222222')
-        if(!click_collect && !admin){
+        if(!click_collect && !admin &&scope.book.from!=='search'){
           scope.showDetail();
           $state.go('hobby_index.home.detail',{bookId:scope.book.id});
           storageService.saveData('current_book',scope.book)

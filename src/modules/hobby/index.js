@@ -92,8 +92,13 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
   };
 
   $scope.goState = function(text){
-    $state.go('hobby_index.'+text);
+    if(text!=="home")
+      spaService.getBooks({tag:text});
+    else
+      spaService.getBooks();
+    window.location.href=hobbySetting.home_url;
     $scope.$broadcast('showDetail',false);
+
   }
 
   $scope.toggleLeft = buildToggler('left');

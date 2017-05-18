@@ -105,6 +105,8 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
     }
     if(criteria&&criteria.id)
       params.id = criteria.id;
+    if(criteria&&criteria.tag)
+      params.tag = criteria.tag;
     params = addCookie(params);
     return $http({
       method:'GET',
@@ -197,6 +199,23 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
     })
   }
 
+  spaService.changeBook = function(book){
+    var params = {};
+    params.data = book;
+    params = addCookie(params);
+    return $http({
+      method: 'PUT',
+      url: hobbySetting.base_url + '/books/edit',
+      "Access-Control-Allow-Origin":"",
+      data: params
+    }).success(function(data, status, headers, config){
+      if(status=='200' && data.id){
+        storageService.deleteData('books',{id:book.id})
+        storageService.addData('books',data);
+      }
+    })
+  }
+
   spaService.deleteBook = function(book){
     var params = {};
     params.id = book.id;
@@ -225,6 +244,10 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
       params: what
     }).success(function(data, status, headers, config){
       if(data.length>0){
+        data.forEach(function(b){
+          b.discount = b.discount?b.discount:1;
+          b.from = 'search';
+        })
         storageService.saveData('books',data);
       }
     }).error(function(data, status, headers, config){

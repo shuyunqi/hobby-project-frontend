@@ -97,15 +97,27 @@
         </div>
       </md-content>
     </md-tab>
-    <md-tab label="详情">
+   <!--  <md-tab label="详情">
       <md-content class="md-padding">
         <div class="col-md-12 mb-detail">
+
         </div>
       </md-content>
-    </md-tab>
+    </md-tab> -->
     <md-tab label="评论">
       <md-content class="md-padding">
-        <div class="col-md-12 mb-detail">
+        <div class="mb-detail" layout="column">
+          <div flex="85" >
+
+          </div>
+          <div layout="row" layout-align="" flex>
+            <md-input-container md-no-float flex="90" style="margin:0px;">
+              <input ng-model="user.title" placeholder="评论">
+            </md-input-container>
+            <div flex>
+              <md-button md-no-ink class="md-raised md-primary" ng-click="addComment">添加评论</md-button>
+            </div>
+          </div>
         </div>
       </md-content>
     </md-tab>

@@ -6,6 +6,18 @@ angular.module('myWeb.lib.service.asyncService',[
 angular.module('myWeb.lib.service.asyncService').provider('asyncService',{
   $get:['storageService' , 'spaService','hobbySetting',function(storageService ,spaService,hobbySetting){
 
+    var unique = function(arr){
+      var res = [];
+      var json = {};
+      for(var i = 0; i < arr.length; i++){
+        if(!json[arr[i]]){
+          res.push(arr[i]);
+          json[arr[i]] = 1;
+        }
+      }
+      return res;
+    }
+
     function getData_home(params){
       console.log('asyncService:change state to book list',params)
       if(!storageService.checkData('books')){
@@ -42,7 +54,20 @@ angular.module('myWeb.lib.service.asyncService').provider('asyncService',{
         spaService.getConsignees();
       }
       if((state !=='order' &&state !=='admin_index' && !storageService.checkData('orderForm'))|| fromState =='order'){
-        spaService.getOrderForm({type:'All'});
+        spaService.getOrderForm({type:'All'}).then(function(){
+          if(!storageService.checkData('buyed_books')){
+            var order = storageService.getData('orderForm');
+            var buyed_books =[];
+            angular.forEach(order,function(o){
+              if(o.status==2){
+                angular.forEach(o.books,function(b){
+                  buyed_books.push(b.id);
+                })
+              }
+            });
+            storageService.saveData('buyed_books',unique(buyed_books));
+          }
+        });
       }
       switch(state){
         case 'hobby_index.home':

@@ -3,7 +3,7 @@
     <div class="md-toolbar-tools">
       <h2>编辑书本</h2>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="closeDialog()">
+      <md-button class="md-icon-button" ng-click="closeDialog()" aria-label="cancel">
         <span class="glyphicon glyphicon-remove"></span>
       </md-button>
     </div>
@@ -43,8 +43,8 @@
           <input ng-model="edit_book.price">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-sm>
-          <label>数量</label>
-          <input type="number" ng-model="edit_book.amount">
+          <label>库存</label>
+          <input type="number" ng-model="edit_book.store">
         </md-input-container>
       </div>
       <md-input-container class="md-block">
@@ -55,8 +55,8 @@
       </md-chips>
     </div>
   </md-dialog-content>
-  <md-dialog-actions style="height: 60px;" layout="row" layout-align="space-around center">
-    <md-button class="md-primary" ng-click="closeDialog()" >取消</md-button>
+  <md-dialog-actions style="height: 60px;" layout="row" layout-align="space-around center" >
+    <md-button class="md-primary" ng-click="closeDialog()"  >取消</md-button>
     <md-button class="md-primary" ng-click="changeBook(edit_book)">确定</md-button>
   </md-dialog-actions>
 </md-dialog>

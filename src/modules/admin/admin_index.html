@@ -30,6 +30,11 @@
             <h4 ng-class="{ 'select_item': sw_option == 'order_options'}">订单管理</h4>
           </div>
         </md-list-item>
+        <md-list-item class="md-1-line" ng-click="sw_option= 'show_store'">
+          <div class="md-list-item-text" layout="column">
+            <h4 ng-class="{ 'select_item': sw_option == 'show_store'}">库存查看</h4>
+          </div>
+        </md-list-item>
         <md-divider ></md-divider>
       </md-list>
     </div>
@@ -81,8 +86,8 @@
                   </md-input-container>
 
                   <md-input-container class="md-block" flex-gt-sm>
-                    <label>数量</label>
-                    <input type="number" ng-model="book.amount">
+                    <label>库存</label>
+                    <input type="number" ng-model="book.store">
                   </md-input-container>
                 </div>
 
@@ -102,18 +107,6 @@
               </div>
             </md-content>
           </md-tab>
-          <md-tab label="编辑">
-            <md-content class="md-padding">
-              <h1 class="md-display-2">Tab Two</h1>
-
-            </md-content>
-          </md-tab>
-          <!-- <md-tab label="three">
-            <md-content class="md-padding">
-              <h1 class="md-display-2">Tab Three</h1>
-
-            </md-content>
-          </md-tab> -->
         </md-tabs>
       </div>
       <div ng-if="sw_option == 'order_options'" layout="column">
@@ -143,6 +136,24 @@
             <div class="text-context">状态:</div>
             <div class="text-context" ng-class="{'done-text': order.status=='2','doing-text':order.status=='1'||order.status=='0'}">{{order.status | showOrderStatus }}</div>
           </div>
+        </div>
+        <div class="text-title" style="text-align: center;margin-top: 100px;" ng-if="data.orderForm.length==0 || !data.orderForm">暂无订单</div>
+      </div>
+      <div ng-if="sw_option == 'show_store'" layout="column" style="margin:20px;">
+        <div class="text-title">库存列表</div>
+        <md-divider></md-divider>
+        <div style="margin-top: 20px;" layout="row" layout-align="space-around center" class="text-context">
+          <div flex="70">书名</div>
+          <div flex="10">数量</div>
+          <div flex="10">单价</div>
+          <div flex="10">折扣</div>
+        </div>
+        <md-divider></md-divider>
+        <div style="" layout="row" ng-repeat="book in data.books" class="text-context" layout-align="space-around center">
+          <div flex="70">{{book.name}}</div>
+          <div flex="10">{{book.store}}</div>
+          <div flex="10">{{book.price}}</div>
+          <div flex="10">{{book.discount *10 |cut:2}} 折</div>
         </div>
       </div>
     </div>

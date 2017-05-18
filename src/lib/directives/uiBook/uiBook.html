@@ -17,7 +17,7 @@
   </div>
   <div class="form-group" style="margin-left: 20px;margin-right: 20px;" ng-if="!admin">
     <md-icon >
-      <span class="glyphicon glyphicon-shopping-cart" ng-class="{ 'icon-hover': !in_cart ,'icon-visited': in_cart}" ng-click="collect()"></span>
+      <span class="glyphicon glyphicon-shopping-cart" ng-class="{ 'icon-hover': !in_cart ,'icon-visited': in_cart,'hide': book.from=='search'}" ng-click="collect()"></span>
     </md-icon>
     <span class="md-price pull-right" style="">￥{{book.price * book.discount | cut: 2}}</span>
   </div>

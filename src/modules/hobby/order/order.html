@@ -46,7 +46,7 @@
       <li ng-repeat = "book in data.orderForm[0].books" style="margin-left: 50px;margin-right: 50px;margin-top: 20px;">
         <div layout="row" style="height: 150px;width: 100%;margin-bottom: 15px;">
           <div>
-            <img style="width: 150px;height: 150px;" src="./images/夜莺.jpg" />
+            <img style="width: 150px;height: 150px;" src="{{book.images||'./images/夜莺.jpg'}}" />
           </div>
           <div flex layout="column" layout-align="center none">
             <div flex="40" class="text-title">{{book.name}}</div>
@@ -125,7 +125,7 @@
           <li ng-repeat = "book in data.orderForm[0].books">
             <div layout="row" style="height: 100px;width: 100%;margin-bottom: 15px;">
               <div>
-                <img style="width: 100px;height: 100px;" src="./images/夜莺.jpg" />
+                <img style="width: 100px;height: 100px;" src="{{book.images || './images/夜莺.jpg'}}" />
               </div>
               <div flex layout="column" layout-align="center none">
                 <div flex="60" class="text-title">{{book.name}}</div>

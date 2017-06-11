@@ -7,11 +7,11 @@ angular.module('myWeb.module.admin').config(['$stateProvider','$mdThemingProvide
     .state('admin_index', {
       url: "/admin",
       templateUrl: 'admin/admin_index.html',
-      controller: ['$scope' , '$timeout' , '$q', 'storageService','spaService', adminCtrl]
+      controller: ['$scope' , '$timeout' ,'$mdDialog', '$q', 'storageService','spaService', adminCtrl]
     });
 }]);
 
-function adminCtrl($scope, $timeout, $q, storageService,spaService){
+function adminCtrl($scope, $timeout, $mdDialog, $q, storageService,spaService){
   $scope.sw_option = 'in_store';
   $scope.data = storageService.getCache();
   $scope.getHeight = function(jian){
@@ -43,5 +43,31 @@ function adminCtrl($scope, $timeout, $q, storageService,spaService){
       }
     });
   }
+  $scope.deleteUser = function(ev,user){
+    var confirm = $mdDialog.confirm()
+      .title('确定要删除用户'+ user.email+'?')
+      .targetEvent(ev)
+      .ok('确定')
+      .cancel('取消');
+    $mdDialog.show(confirm).then(function() {
+      spaService.deleteUser(user.id)
+    }, function() {
+    });
+  }
 }
 
+angular.module('myWeb.module.admin').filter('dateFormat',[function(){
+  return function(date,type){
+    if(type === 2 ){
+      return new Date(date).Format('yy-MM-dd')
+    }else{
+      return new Date(date).Format('yy-MM-dd hh:mm:ss')
+    }
+  }
+}])
+
+angular.module('myWeb.module.admin').filter('boolTranslate',[function(){
+  return function(bool,trueText,falseText){
+    return bool?trueText:falseText
+  }
+}])

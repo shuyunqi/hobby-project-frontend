@@ -19,7 +19,6 @@ angular.module('myWeb.lib.directive.uiBook').directive('uiBook',['$state','stora
     templateUrl:'directives/uiBook/uiBook.html',
     link:function(scope, element, attrs, ctrl, transclude){
       var admin = scope.admin?scope.admin:false;
-      // var current_carts = storageService.getData('current_carts');
 
       scope.$watch(function(){
         return scope.book;
@@ -31,25 +30,22 @@ angular.module('myWeb.lib.directive.uiBook').directive('uiBook',['$state','stora
         }
       });
       scope.$watch(function(){
-        return storageService.checkData('current_carts');
+        var length = 0;
+        if(storageService.checkData('current_carts')){
+          length = Object.keys(storageService.getData('current_carts')).length;
+        }
+        return length;
       },function(newValue,oldValue){
         if(newValue){
           var current_carts = storageService.getData('current_carts');
+          var flag = false;
           current_carts.forEach(function(c){
-            if(c &&c.id == scope.book.id){
-              scope.in_cart = true;
+            if(c.id == scope.book.id){
+              flag=true;
             }
-          })
+          });
+          scope.in_cart = flag;
         }
-        // console.log(current_carts)
-        // if(newValue && scope.book){
-        //   console.log('111111111')
-        //   newValue.forEach(function(c){
-        //     if(c &&c.id == scope.book.id){
-        //       scope.in_cart = true;
-        //     }
-        //   })
-        // }
       })
 
       scope.editBook = function(ev){
@@ -93,8 +89,9 @@ angular.module('myWeb.lib.directive.uiBook').directive('uiBook',['$state','stora
         scope.book.collection = true;
         spaService.addCarts({
           bookId: scope.book.id
-        });
-        scope.in_cart = true;
+        }).then(function(){
+          scope.in_cart = true;
+        })
       }
 
       scope.deleteBook = function(ev){

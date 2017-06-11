@@ -1,82 +1,19 @@
-<!-- <div class="mb-detail" >
-  <div class="back"></div>
-  <div class="col-md-12">
-    <div class="col-md-6 mb-left">
-      <img class="mb-pic" style="width: 300px;height: 300px;" ng-src="/images/夜莺.jpg" />
-    </div>
-    <div class="col-md-6 mb-right">
-      <div class="mb-title">{{book.name}}sssssssssss</div>
-      <div class="mb-context">{{book.context}}adasdacacasadaa</div>
-      <ul class="mb-ul">
-        <li class="mb-li">作者：{{book.author}}</li>
-        <li class="mb-li">出版社：{{book.publishHouse}}</li>
-        <li class="mb-li">出版时间：{{book.publishTime}}</li>
-      </ul>
-      <div class="mb-price">
-        <span class="price-label">价格：</span><span class="price-body">￥98</span>
-        <span class="price-beizhu">[9.8折]</span>
-        <span class="price-beizhu">￥100</span>
-      </div>
-      <div class="mb-count">
-        <md-chips ng-model="ctrl.numberChips2">
-          <input style='font-size: 20px;' type="number" ng-model="form.number" ng-change='checkNum()'>
-        </md-chips>
-      </div>
-      <div class="mb-buy pull-right">
-      <md-button class="md-raised md-warn">加入购物车</md-button>
-        <md-button class="md-raised md-warn">购买</md-button>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="detail-bottom-bar">
-    <span class="bar-cell">商品详情</span>
-    <span class="bar-cell">评价</span>
-  </div>
-</div> -->
-
-
-<md-content class="md-padding md-whiteframe-5dp" style="width: 80%;margin-left: 10%; margin-top: 30px;">
-    <!-- <md-nav-bar
-      md-selected-nav-item="currentNavItem"
-      nav-bar-aria-label="navigation links">
-      <md-nav-item md-nav-click="goto('home')" name="home">
-        首页
-      </md-nav-item>
-      <md-nav-item md-nav-click="goto('detail')" name="detail">
-        详情
-      </md-nav-item>
-      <md-nav-item md-nav-click="goto('comment')" name="comment">
-        评论
-      </md-nav-item>
-    </md-nav-bar>
-    <div class="ext-content" style="margin-top: 30px;">
-
-
-      <div class="col-md-12 mb-detail" ng-if="currentNavItem=='detail'">
-
-      </div>
-      <div class="col-md-12 mb-detail" ng-if="currentNavItem=='comment'">
-
-      </div>
-
-    </div> -->
+<md-content class="md-padding md-whiteframe-5dp" style="padding-right: 0;padding-bottom: 0;width: 80%;margin-left: 10%; margin-top: 30px;">
 
   <md-tabs md-dynamic-height md-border-bottom>
     <md-tab label="首页">
       <md-content class="md-padding">
         <div class="col-md-12 mb-detail">
           <div class="col-md-6 mb-left">
-            <img class="mb-pic" ng-src="/images/夜莺.jpg" />
+            <img class="mb-pic" ng-src="{{data.current_book.picture||'/images/夜莺.jpg'}}" />
           </div>
           <div class="col-md-6 mb-right">
             <div class="mb-title">{{data.current_book.name}}</div>
+            <div class="">作者：{{data.current_book.author}}</div>
             <div class="mb-context">{{data.current_book.context}}</div>
             <ul class="mb-ul">
-              <li class="mb-li">作者：{{data.current_book.author}}</li>
-              <li class="mb-li">出版社：{{data.current_book.publishHouse}}</li>
-              <li class="mb-li">出版时间：{{data.current_book.publishTime}}</li>
+              <li class="mb-li">出版社：{{data.current_book.pubishHouse}}</li>
+              <li class="mb-li">出版时间：{{data.current_book.pubishTime | dateFormat:2}}</li>
             </ul>
             <div class="mb-price">
               <span class="price-label">价格：</span><span class="price-body">￥{{data.current_book.price * data.current_book.discount | cut: 2}}</span>
@@ -91,35 +28,39 @@
             <div class="mb-buy pull-right">
               <md-button class="md-raised md-warn" ng-if="!in_cart" ng-click="addCart()">加入购物车</md-button>
               <md-button class="md-raised md-success" ng-if="in_cart">已加入购物车</md-button>
-              <md-button class="md-raised md-warn">购买</md-button>
+              <md-button class="md-raised md-warn" ng-click="buyBook()">购买</md-button>
             </div>
           </div>
         </div>
       </md-content>
     </md-tab>
-   <!--  <md-tab label="详情">
-      <md-content class="md-padding">
-        <div class="col-md-12 mb-detail">
-
-        </div>
-      </md-content>
-    </md-tab> -->
     <md-tab label="评论">
-      <md-content class="md-padding">
-        <div class="mb-detail" layout="column">
-          <div flex="85" >
-
-          </div>
-          <div layout="row" layout-align="" flex>
-            <md-input-container md-no-float flex="90" style="margin:0px;">
-              <input ng-model="user.title" placeholder="评论">
-            </md-input-container>
-            <div flex>
-              <md-button md-no-ink class="md-raised md-primary" ng-click="addComment">添加评论</md-button>
+      <md-content style="padding: 10px;height: 355px; width: inherit;">
+        <div ng-repeat="comment in data.current_comments">
+          <div>
+            <div layout="row" style="width: 100%;" layout-align="space-between center">
+              <div class="text-context" style="margin-left: 10px;">{{comment.user.name?comment.user.name:comment.user.email}}</div>
+              <div style="font-size: 14px;color: #ccc;">{{comment.createdAt | dateFormat}}</div>
+            </div>
+            <md-divider></md-divider>
+            <div style="font-size: 16px;margin-bottom: 20px;">
+              评论：{{comment.text}}
             </div>
           </div>
         </div>
+
       </md-content>
+      <div style="height: 70px;border-top: 1px solid #ccc;">
+        <div ng-show="isBuy" layout="row">
+          <md-input-container md-no-float class="md-block" style="width: 80%;">
+            <input ng-model="myComment" placeholder="评论" type="text" />
+          </md-input-container>
+          <md-button style="height: 20px;margin-left: 20px;" md-no-ink class="md-raised md-primary" ng-click="add_comment()">添加评论</md-button>
+        </div>
+        <div ng-show="!isBuy">
+          <div class="text-context" style="text-align: center;margin-top: 20px;">尚未购买，无法评论</div>
+        </div>
+      </div>
     </md-tab>
   </md-tabs>
 </md-content>

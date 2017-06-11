@@ -48,7 +48,7 @@
     <span>{{data.current_user.name?data.current_user.name:data.current_user.email}}</span>
     <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('gerenziliao')"></span>
   </div>
-  <md-content layout-margin style="margin: 0px;" flex="80">
+  <md-content layout-margin style="margin: 0px;" flex="80" ng-if="data.current_user.id">
     <div ng-if="!show_change_password && !show_change_username">
       <md-button md-no-ink class="md-primary" ng-click="changePassword();">修改密码</md-button>
       <md-button md-no-ink class="md-primary" ng-click="changeUsername();" >修改用户名</md-button>
@@ -121,6 +121,11 @@
       </ul>
     </div>
   </md-content>
+  <md-content layout-margin style="margin: 0px;" flex="80" ng-if="!data.current_user">
+    <div class="text-context" style="text-align: center;">未登录，请先
+      <a href="" ng-click="loginModal();">登录</a>
+    </div>
+  </md-content>
 </md-sidenav>
 
 <md-sidenav class="md-sidenav" md-component-id="gouwuche" md-disable-backdrop md-whiteframe="4" layout="column">
@@ -133,9 +138,9 @@
       <div layout="row" style="height: 130px;">
         <md-checkbox aria-label="carts" ng-checked="exists(item, selected)" ng-click="toggle(item, selected)" flex="5">
         </md-checkbox>
-        <img ng-src="/images/夜莺.jpg" style="padding: 5px;" flex="45" />
+        <img ng-src="{{item.images||'./images/夜莺.jpg'}}" style="padding: 5px;" flex="45" />
         <div flex="50" layout="column">
-          <div style="padding: 10px;font-size: 18px;" flex="30">{{item.name}}</div>
+          <div style="padding: 10px;font-size: 18px;" flex="30">{{item.name | cut:7}}</div>
           <div class="cart_number" flex="30">
             <md-chips ng-model="item.bookAmounts">
               <input style='font-size: 20px;' type="number" ng-model="item.amount" ng-change='checkNum(item)'>
@@ -174,13 +179,16 @@
     <span>订单</span>
     <span class="title-close glyphicon glyphicon-remove" ng-click="closeSidenav('dingdan')"></span>
   </div>
-  <md-content layout-margin flex="90">
+  <md-content layout-margin  style="margin: 0px;" flex="90">
     <div ng-repeat="order in data.orderForm" layout="column" style="padding: 10px;" class="md-whiteframe-2dp">
       <div>
-        订单编号:{{order.order_account}}
+        <span>
+          订单编号:{{order.order_account}}
+        </span>
+        <span class="glyphicon glyphicon-trash mb-icon pull-right" style="font-size: 15px;margin: 3px;" ng-click="deleteOrderForm($event,order)"></span>
       </div>
       <div ng-repeat="book in order.books" layout="row" style="margin-top: 5px;margin-bottom: 5px;" layout-align="center center">
-        <img style="width: 50px;height: 50px;" src="./images/夜莺.jpg" />
+        <img style="width: 50px;height: 50px;" src="{{book.images||'./images/夜莺.jpg'}}" />
         <div flex="60">{{book.name}}</div>
         <div flex="10">{{book.amount}}</div>
       </div>
@@ -188,7 +196,6 @@
         <div class="text-context">状态:</div>
         <div class="text-context" ng-class="{'done-text': order.status=='2','doing-text':order.status=='1'||order.status=='0'}">{{order.status | showOrderStatus }}</div>
         <md-button ng-click="conetinueOrder(order)" ng-if="order.status<2"><div class="text-context" style="color: orange;">继续订单</div></md-button>
-
       </div>
     </div>
     <div ng-if='data.orderForm.length==0||!data.orderForm'>

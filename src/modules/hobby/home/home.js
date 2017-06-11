@@ -28,6 +28,7 @@ function homeCtrl($mdSidenav,$scope,$timeout,$filter,$state,$http,$modal,spaServ
 
   $scope.$on('showDetail',function(ev,data){
     $scope.showDetail = data;
+    $scope.page=1;
   })
   $scope.goDetail=function(){
     $scope.showDetail=true;

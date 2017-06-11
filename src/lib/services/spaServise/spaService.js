@@ -14,7 +14,8 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
   }
   function addCookie(params){
     var token = getCookie('man');
-    params.token = token;
+    if(token)
+      params.token = token;
     return params;
   }
   function getCookie(c_name){
@@ -147,6 +148,10 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
 
   spaService.addCarts = function(criteria){
     var params = {};
+    if(!storageService.checkData('current_user')){
+      $mdToast.show($mdToast.pleaseLogin());
+      return new Promise(function(){});
+    }
     params.userId = storageService.getData('current_user').id;
     params.bookId = criteria.bookId;
     params = addCookie(params);
@@ -166,7 +171,11 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
   }
   spaService.deleteCart = function(cart){
     var params = {};
-    params.cartId = cart.id;
+    if(cart instanceof Array){
+      params.cartIds= cart.map(function(c){return c.id})
+    }else if(cart instanceof Object){
+      params.cartId = cart.id;
+    }
     params = addCookie(params);
     return $http({
       method: 'PUT',
@@ -175,7 +184,13 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
       data: params
     }).success(function(data, status, headers, config){
       if(status=='200' && data){
-        storageService.deleteData('current_carts',data)
+        if(params.cartId)
+          storageService.deleteData('current_carts',data);
+        else if(params.cartIds){
+          data.forEach(function(d){
+            storageService.deleteData('current_carts',d);
+          })
+        }
       }
     })
   }
@@ -257,6 +272,26 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
     })
   }
 
+  spaService.getUsers = function(criteria){
+    var params={};
+    if(!criteria){
+      params.type='All';
+    }
+    params = addCookie(params);
+    return $http({
+      method:'GET',
+      url: hobbySetting.base_url + '/users/current',
+      "Access-Control-Allow-Origin":"",
+      params: params
+    }).success(function(data, status, headers, config){
+      if(data.length>0){
+        storageService.saveData('users_list',data);
+      }
+    }).error(function(data, status, headers, config){
+
+    })
+  }
+
   spaService.editUser = function(who,criteria,what){
     var params = {};
     params.id = who;
@@ -281,6 +316,22 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
             $mdToast.editUserError()
           );
         }
+      }
+    })
+  }
+
+  spaService.deleteUser = function(userId){
+    var params = {};
+    params.userId = userId;
+    params = addCookie(params);
+    return $http({
+      method: 'PUT',
+      url: hobbySetting.base_url + '/users/delete',
+      "Access-Control-Allow-Origin":"",
+      data: params
+    }).success(function(data, status, headers, config){
+      if(data.userId){
+        storageService.deleteData('users_list',{id:data.userId})
       }
     })
   }
@@ -366,11 +417,13 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
       "Access-Control-Allow-Origin":"",
       params: params
     }).success(function(data, status, headers, config){
-      storageService.deleteData('orderForm');
-      if(typeof data == 'object' && data instanceof Array){
-        storageService.saveData('orderForm',data);
-      }else{
-        storageService.addData('orderForm',data);
+      if(!data.error){
+        storageService.deleteData('orderForm');
+        if(typeof data == 'object' && data instanceof Array){
+          storageService.saveData('orderForm',data);
+        }else{
+          storageService.addData('orderForm',data);
+        }
       }
     })
   }
@@ -389,6 +442,21 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
 
     })
   }
+  spaService.deleteOrderForm = function(order){
+    var params = {};
+    params.order_account = order.order_account;
+    params = addCookie(params);
+    return $http({
+      method: 'PUT',
+      url: hobbySetting.base_url + '/orderForm/delete',
+      "Access-Control-Allow-Origin":"",
+      data: params
+    }).success(function(data, status, headers, config){
+      if(data.order_account){
+        storageService.deleteData('orderForm',{order_account:data.order_account});
+      }
+    })
+  }
   spaService.payOrder = function(){
     var params = {};
     params.orderForm = storageService.getData('orderForm');
@@ -400,6 +468,39 @@ angular.module('myWeb.lib.service.spaService').service('spaService' ,['$http', '
       data: params
     }).success(function(data, status, headers, config){
 
+    })
+  }
+  spaService.getComments = function(bookId){
+    var params = {};
+    params.scriptId = bookId;
+    params = addCookie(params);
+    return $http({
+      method: 'GET',
+      url: hobbySetting.base_url + '/comments/current',
+      "Access-Control-Allow-Origin":"",
+      params: params
+    }).success(function(data, status, headers, config){
+      if(!data.error){
+        storageService.deleteData('current_comments')
+        storageService.saveData('current_comments',data)
+      }
+    })
+  }
+  spaService.addComment = function(bookId,comment){
+    console.log(bookId,comment)
+    var params={};
+    params.scriptId= bookId;
+    params.comment = comment;
+    params = addCookie(params);
+
+    return $http({
+      method: 'PUT',
+      url: hobbySetting.base_url + '/comments/add',
+      "Access-Control-Allow-Origin":"",
+      data: params
+    }).success(function(data, status, headers, config){
+      if(!data.error)
+        storageService.addData('current_comments',data);
     })
   }
 

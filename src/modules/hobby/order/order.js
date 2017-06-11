@@ -126,6 +126,7 @@ function orderCtrl($mdSidenav, $mdDialog,$scope,$timeout,$filter,$state,$http,$m
       }
       $scope.addConsigneeData = function(data){
         spaService.addConsignee(data);
+        $mdDialog.hide();
       }
     }
   }

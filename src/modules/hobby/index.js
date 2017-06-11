@@ -9,14 +9,14 @@ angular.module('myWeb.module.hobby').config(['$stateProvider','$mdThemingProvide
     .state('hobby_index', {
       url: "/hobby",
       templateUrl: 'hobby/hobby_index.html',
-      controller: ['$scope','$timeout','$filter','$state','$http','$modal', '$mdSidenav', '$mdToast', 'stateService', 'spaService', 'storageService', 'hobbySetting', indexCtrl]
+      controller: ['$scope','$timeout','$filter','$state','$http','$modal','$mdDialog', '$mdSidenav', '$mdToast', 'stateService', 'spaService', 'storageService', 'hobbySetting', indexCtrl]
     });
 
   $mdThemingProvider.theme('docs-dark', 'default')
     .primaryPalette('yellow');
 }]);
 
-function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdToast, stateService, spaService, storageService,hobbySetting){
+function indexCtrl($scope,$timeout,$filter,$state,$http,$modal,$mdDialog, $mdSidenav, $mdToast, stateService, spaService, storageService,hobbySetting){
   //default setting
   $scope.register = false;
   $scope.showUser = false;
@@ -26,7 +26,6 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
 
   //get data
   $scope.data = storageService.getCache();
-
   console.log($scope.data);
 
   $scope.loginModal = function(){
@@ -92,13 +91,13 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
   };
 
   $scope.goState = function(text){
+
     if(text!=="home")
       spaService.getBooks({tag:text});
     else
       spaService.getBooks();
     window.location.href=hobbySetting.home_url;
     $scope.$broadcast('showDetail',false);
-
   }
 
   $scope.toggleLeft = buildToggler('left');
@@ -172,10 +171,9 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
   }
 
   $scope.goOrder = function(){
-    if($scope.selected.length == 0){
-
-    }else{
+    if($scope.selected.length !== 0){
       spaService.addOrderForm($scope.selected).then(function(){
+        spaService.deleteCart($scope.selected);
         window.location.reload();
         window.location.href= hobbySetting.order_url + '/'+$scope.data.current_orderForm.order_account;
       });
@@ -203,6 +201,20 @@ function indexCtrl($scope,$timeout,$filter,$state,$http,$modal, $mdSidenav, $mdT
   }
   $scope.deleteConsignee =function(consignee){
     spaService.deleteConsignee(consignee);
+  }
+  $scope.deleteOrderForm = function(ev,order){
+    var confirm = $mdDialog.confirm()
+      .title('确定要删除的订单'+order.order_account+'?')
+      .ariaLabel('Lucky day')
+      .targetEvent(ev)
+      .ok('确定')
+      .cancel('取消');
+    $mdDialog.show(confirm).then(function() {
+      spaService.deleteOrderForm(order).then(function(){
+        console.log('sssssssssssssssssssss')
+      })
+    }, function() {
+    });
   }
 
   //check box

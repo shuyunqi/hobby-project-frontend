@@ -25,10 +25,12 @@ angular.module('myWeb.lib.service.asyncService').provider('asyncService',{
       }
     }
     function getData_detail(params){
-      console.log('asyncService:change state to book detail',params)
-      if(!storageService.checkData('current_book')){
-        spaService.getBooks({id:params.bookId});
-      }
+      console.log('ddddddddddddddddddddasyncService:change state to book detail',params)
+
+      spaService.getBooks({id:params.bookId}).then(function(){
+        spaService.getComments(params.bookId);
+      });
+
     }
     function getData_order(params){
       spaService.getOrderForm({
@@ -41,6 +43,7 @@ angular.module('myWeb.lib.service.asyncService').provider('asyncService',{
     function getData_admin(params){
       spaService.getOrderForm({type:'admin'});
       spaService.getBooks();
+      spaService.getUsers();
     }
 
     function _asyncPage(state,params,fromState){
@@ -51,7 +54,10 @@ angular.module('myWeb.lib.service.asyncService').provider('asyncService',{
         spaService.getCarts();
       }
       if(state !=='order' &&state !=='admin_index'&& !storageService.checkData('current_consignees')){
-        spaService.getConsignees();
+        console.log('ssssssssss')
+        setTimeout(function(){
+          spaService.getConsignees();
+        },0)
       }
       if((state !=='order' &&state !=='admin_index' && !storageService.checkData('orderForm'))|| fromState =='order'){
         spaService.getOrderForm({type:'All'}).then(function(){

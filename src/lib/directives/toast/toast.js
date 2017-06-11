@@ -227,5 +227,32 @@ angular.module('myWeb.lib.directive').config(['$mdToastProvider',function($mdToa
       };
     }
   });
-
+  $mdToastProvider.addPreset('pleaseLogin', {
+    options: function() {
+      return {
+        template:
+          '<md-toast>' +
+            '<div class="md-toast-content" style="background-color: orange;">' +
+              '未登录，请先登录' +
+            '</div>' +
+          '</md-toast>',
+        position: config.position,
+        hideDelay: config.delay
+      };
+    }
+  });
+  $mdToastProvider.addPreset('addCommentSuccess', {
+    options: function() {
+      return {
+        template:
+          '<md-toast>' +
+            '<div class="md-toast-content" style="background-color: green;">' +
+              '评论发布成功！' +
+            '</div>' +
+          '</md-toast>',
+        position: config.position,
+        hideDelay: config.delay
+      };
+    }
+  });
 }])
